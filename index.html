@@ -5,683 +5,1499 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>National Center for Mental Health in Saudi Arabia</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1a7f37 0%, #0d5c29 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+
+    body.rtl {
+        direction: rtl;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        padding: 100px 50px 60px 50px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        border-top: 5px solid #1a7f37;
+        min-height: 80vh;
+    }
+
+    .page {
+        display: none;
+    }
+
+    .page.active {
+        display: block;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #c9a961;
+        margin-bottom: 60px;
+        margin-top: 80px;
+        line-height: 1.4;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: #c9a961;
+        margin-bottom: 40px;
+    }
+
+    .description {
+        text-align: left;
+        font-size: 18px;
+        color: #333;
+        line-height: 2;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .rtl .description {
+        text-align: right;
+    }
+
+    .button {
+        background: #1a7f37;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 40px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        transition: background 0.3s;
+    }
+
+    .button:hover {
+        background: #0d5c29;
+    }
+
+    .tabs {
+        display: flex;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 40px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab {
+        padding: 15px 40px;
+        background: none;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        color: #666;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.3s;
+    }
+
+    .tab.active {
+        color: #1a7f37;
+    }
+
+    .tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #1a7f37;
+    }
+
+    .tab:hover {
+        color: #1a7f37;
+    }
+
+    .tab-content {
+        display: none;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    input[type="email"], input[type="password"], input[type="text"], input[type="tel"] {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        font-size: 15px;
+        transition: border-color 0.3s;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #1a7f37;
+    }
+
+    .forgot-link, .back-link {
+        color: #1a7f37;
+        text-decoration: none;
+        font-size: 14px;
+        display: inline-block;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .forgot-link:hover, .back-link:hover {
+        text-decoration: underline;
+    }
+
+    .forgot-section {
+        display: none;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .forgot-section.active {
+        display: block;
+    }
+
+    .create-account-section {
+        text-align: center;
+        padding: 40px 0;
+    }
+
+    .create-account-section p {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.6;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-section {
+        margin-bottom: 35px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #e8e8e8;
+    }
+
+    .form-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .form-section h3 {
+        font-size: 18px;
+        color: #1a7f37;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        font-size: 15px;
+        background: white;
+        cursor: pointer;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #1a7f37;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        font-size: 15px;
+        min-height: 150px;
+        resize: vertical;
+        font-family: inherit;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: #1a7f37;
+    }
+
+    .terms-box {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 30px 0;
+        border: 1px solid #e0e0e0;
+    }
+
+    .terms-box label {
+        display: flex;
+        align-items: start;
+        cursor: pointer;
+        font-weight: normal;
+    }
+
+    .terms-box input[type="checkbox"] {
+        margin-right: 12px;
+        margin-top: 4px;
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .rtl .terms-box input[type="checkbox"] {
+        margin-right: 0;
+        margin-left: 12px;
+    }
+
+    .terms-box span {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.7;
+    }
+
+    .facility-card {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.3s;
+        cursor: pointer;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .facility-card:hover {
+        border-color: #1a7f37;
+        box-shadow: 0 4px 12px rgba(26, 127, 55, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .facility-card.selected {
+        border-color: #1a7f37;
+        background: #f0f8f4;
+    }
+
+    .chatbot-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #1a7f37;
+        color: white;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+
+    .rtl .chatbot-button {
+        right: auto;
+        left: 30px;
+    }
+
+    .chatbot-button:hover {
+        background: #0d5c29;
+        transform: scale(1.1);
+    }
+
+    .chatbot-window {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 350px;
+        height: 500px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        display: none;
+        flex-direction: column;
+        z-index: 999;
+    }
+
+    .rtl .chatbot-window {
+        right: auto;
+        left: 30px;
+    }
+
+    .chatbot-window.open {
+        display: flex;
+    }
+
+    .chatbot-header {
+        background: #1a7f37;
+        color: white;
+        padding: 15px;
+        border-radius: 12px 12px 0 0;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chatbot-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    .chatbot-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        background: #f5f5f5;
+    }
+
+    .message {
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        border-radius: 12px;
+        max-width: 80%;
+        word-wrap: break-word;
+        animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1a7f37 0%, #0d5c29 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .message.bot {
+        background: #e8f5e9;
+        margin-right: auto;
+    }
+
+    .message.user {
+        background: #1a7f37;
+        color: white;
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .rtl .message.bot {
+        margin-right: 0;
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .rtl .message.user {
+        margin-left: 0;
+        margin-right: auto;
+        text-align: left;
+    }
+
+    .chatbot-input {
+        display: flex;
+        padding: 15px;
+        border-top: 1px solid #e0e0e0;
+        background: white;
+    }
+
+    .chatbot-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+    .rtl .chatbot-input input {
+        margin-right: 0;
+        margin-left: 10px;
+    }
+
+    .chatbot-input button {
+        background: #1a7f37;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .chatbot-input button:hover {
+        background: #0d5c29;
+    }
+
+    .map-container {
+        width: 100%;
+        height: 400px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border: 2px solid #e0e0e0;
+        background: #f0f0f0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .map-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #666;
+    }
+
+    .map-placeholder svg {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 15px;
+        fill: #1a7f37;
+    }
+
+    .ai-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: bold;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+
+    .rtl .ai-badge {
+        margin-left: 0;
+        margin-right: 10px;
+    }
+
+    .sentiment-indicator {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 15px;
+        animation: slideIn 0.5s;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .sentiment-positive {
+        background: #d4edda;
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
+
+    .sentiment-neutral {
+        background: #fff3cd;
+        color: #856404;
+        border-left: 4px solid #ffc107;
+    }
+
+    .sentiment-negative {
+        background: #f8d7da;
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+    }
+
+    .distance-badge {
+        display: inline-block;
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        margin-left: 10px;
+    }
+
+    .typing-indicator {
+        display: inline-block;
+    }
+
+    .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #1a7f37;
+        margin: 0 2px;
+        animation: typing 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+        0%, 60%, 100% {
+            transform: translateY(0);
+        }
+
+        30% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .chatbot-window {
+            width: 90%;
+            right: 5%;
+            max-width: 350px;
+        }
+
+        .rtl .chatbot-window {
+            right: auto;
+            left: 5%;
         }
 
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 100px 50px 60px 50px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            border-top: 5px solid #1a7f37;
-            min-height: 80vh;
+            padding: 60px 30px 40px 30px;
         }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 32px;
-            font-weight: bold;
-            color: #c9a961;
-            margin-bottom: 60px;
-            margin-top: 80px;
-            font-family: Arial, sans-serif;
-            line-height: 1.4;
-        }
-
-        h2 {
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            color: #c9a961;
-            margin-bottom: 40px;
-            font-family: Arial, sans-serif;
-        }
-
-        .description {
-            text-align: left;
-            font-size: 18px;
-            font-weight: normal;
-            color: #333;
-            line-height: 2;
-            font-family: Arial, sans-serif;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .button {
-            background: #1a7f37;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: Arial, sans-serif;
-            margin-top: 40px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            transition: background 0.3s;
-        }
-
-        .button:hover {
-            background: #0d5c29;
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 0;
-            margin-bottom: 40px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .tab {
-            padding: 15px 40px;
-            background: none;
-            border: none;
-            font-size: 18px;
-            font-weight: bold;
-            color: #666;
-            cursor: pointer;
-            font-family: Arial, sans-serif;
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        .tab.active {
-            color: #1a7f37;
-        }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #1a7f37;
-        }
-
-        .tab:hover {
-            color: #1a7f37;
-        }
-
-        .tab-content {
-            display: none;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 15px;
-            font-family: Arial, sans-serif;
-        }
-
-        input[type="email"],
-        input[type="password"],
-        input[type="text"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            font-size: 15px;
-            font-family: Arial, sans-serif;
-            transition: border-color 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #1a7f37;
-        }
-
-        .forgot-link {
-            color: #1a7f37;
-            text-decoration: none;
-            font-size: 14px;
-            display: inline-block;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        .forgot-link:hover {
-            text-decoration: underline;
-        }
-
-        .forgot-section {
-            display: none;
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .forgot-section.active {
-            display: block;
-        }
-
-        .back-link {
-            color: #1a7f37;
-            text-decoration: none;
-            font-size: 14px;
-            display: inline-block;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .create-account-section {
-            text-align: center;
-            padding: 40px 0;
-        }
-
-        .create-account-section p {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .form-section {
-            margin-bottom: 35px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #e8e8e8;
-        }
-
-        .form-section:last-of-type {
-            border-bottom: none;
-        }
-
-        .form-section h3 {
-            font-size: 18px;
-            color: #1a7f37;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .form-section p.section-note {
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            font-size: 15px;
-            font-family: Arial, sans-serif;
-            background: white;
-            cursor: pointer;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: #1a7f37;
-        }
-
-        input[type="date"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            font-size: 15px;
-            font-family: Arial, sans-serif;
-        }
-
-        input[type="date"]:focus {
-            outline: none;
-            border-color: #1a7f37;
-        }
-
-        small.field-note {
-            color: #888;
-            font-size: 12px;
-            display: block;
-            margin-top: 5px;
-        }
-
-        .terms-box {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
-            margin: 30px 0;
-            border: 1px solid #e0e0e0;
-        }
-
-        .terms-box label {
-            display: flex;
-            align-items: start;
-            cursor: pointer;
-            font-weight: normal;
-        }
-
-        .terms-box input[type="checkbox"] {
-            margin-right: 12px;
-            margin-top: 4px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .terms-box span {
-            font-size: 14px;
-            color: #333;
-            line-height: 1.7;
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
+    }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Page 1: Home -->
         <div class="page active" id="page1">
-            <h1>National Center for Mental Health<br>in Saudi Arabia</h1>
-            
-            <p class="description">
-                Welcome to the confidential user-friendly platform that encourages seeking support and makes it simple and accessible to all. Our core feature is the <strong>AI-Empowered Triage center</strong>, a platform that acts as your private decision-making tool. Through providing a uniform checklist of common emotional and mental health issues, the platform encourages and empowers you to anonymously select your current state of wellness, based on which you will be directed to resources and available support—whether that's one-tap access to crisis services, connecting with a licensed professional, or a self-help tools, toolkits and training.
+            <h1 data-translate="home_title">
+                National Center for Mental Health
+                <br>
+                in Saudi Arabia
+            </h1>
+            <p class="description" data-translate="home_description">
+                Welcome to the confidential user-friendly platform that encourages seeking support and makes it simple and accessible to all. Our core feature is the 
+                <strong>AI-Empowered Triage center</strong>
+                , a platform that acts as your private decision-making tool.
             </p>
-
-            <button class="button" onclick="showPage('page2')">Get Started</button>
+            <button class="button" onclick="showPage('page2')" data-translate="get_started">Get Started</button>
         </div>
 
-        <!-- Page 2: Sign In / Sign Up -->
+        <!-- Page 2: Sign In/Sign Up -->
         <div class="page" id="page2">
-            <h2>Welcome</h2>
-
+            <h2 data-translate="welcome">Welcome</h2>
             <div class="tabs">
-                <button class="tab active" onclick="showTab('signin')">Sign In</button>
-                <button class="tab" onclick="showTab('signup')">Sign Up</button>
+                <button class="tab active" onclick="showTab('signin')" data-translate="signin">Sign In</button>
+                <button class="tab" onclick="showTab('signup')" data-translate="signup">Sign Up</button>
             </div>
-
-            <!-- Sign In Tab -->
             <div class="tab-content active" id="signin-content">
                 <div id="signin-message" style="display: none; padding: 15px; margin-bottom: 20px; border-radius: 5px; text-align: center; font-weight: bold;"></div>
-                
                 <form onsubmit="event.preventDefault(); handleSignIn();">
                     <div class="form-group">
-                        <label for="signin-username">Username</label>
+                        <label for="signin-username" data-translate="username">Username</label>
                         <input type="text" id="signin-username" required>
                     </div>
-
                     <div class="form-group">
-                        <label for="signin-password">Password</label>
+                        <label for="signin-password" data-translate="password">Password</label>
                         <input type="password" id="signin-password" required>
                     </div>
-
-                    <button type="submit" class="button">Log In</button>
+                    <button type="submit" class="button" data-translate="login">Log In</button>
                 </form>
-
-                <a class="forgot-link" onclick="showForgotPassword()">Forgot your password?</a>
-
-                <!-- Forgot Password Section -->
+                <a class="forgot-link" onclick="showForgotPassword()" data-translate="forgot_password">Forgot your password?</a>
                 <div class="forgot-section" id="forgot-section">
-                    <h3 style="font-size: 20px; color: #333; margin-bottom: 20px;">Reset Your Password</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Enter your email address or username and we'll send you a link to reset your password.</p>
-                    
+                    <h3 style="font-size: 20px; color: #333; margin-bottom: 20px;" data-translate="reset_password">Reset Your Password</h3>
                     <div class="form-group">
-                        <label for="forgot-email">Email Address or Username</label>
+                        <label for="forgot-email" data-translate="email_or_username">Email Address or Username</label>
                         <input type="text" id="forgot-email" required>
                     </div>
-
-                    <button class="button" onclick="alert('Password reset link sent to your email!')">Send Reset Link</button>
-                    <a class="back-link" onclick="hideForgotPassword()">← Back to Sign In</a>
+                    <button class="button" onclick="sendResetLink()" data-translate="send_reset">Send Reset Link</button>
+                    <a class="back-link" onclick="hideForgotPassword()" data-translate="back_signin">← Back to Sign In</a>
                 </div>
             </div>
-
-            <!-- Sign Up Tab -->
             <div class="tab-content" id="signup-content">
                 <div class="create-account-section">
-                    <p>Ready to begin your journey to better mental health?<br>Create your account to access personalized support and resources.</p>
-                    <button class="button" onclick="showPage('page3')">Create Account</button>
+                    <p data-translate="signup_message">
+                        Ready to begin your journey to better mental health?
+                        <br>
+                        Create your account to access personalized support and resources.
+                    </p>
+                    <button class="button" onclick="showPage('page3')" data-translate="create_account">Create Account</button>
                 </div>
             </div>
-
             <p style="text-align: center; margin-top: 30px;">
-                <a class="back-link" onclick="showPage('page1')">← Back to Home</a>
+                <a class="back-link" onclick="showPage('page1')" data-translate="back_home">← Back to Home</a>
             </p>
         </div>
 
-        <!-- Page 3: Create Account Form -->
+        <!-- Page 3: Create Account -->
         <div class="page" id="page3">
-            <h2>Create Your Account</h2>
-            <p style="text-align: center; color: #888; margin-bottom: 40px; font-size: 14px;">All information is confidential and secure</p>
-
-            <form onsubmit="event.preventDefault(); showPage('page4');" style="max-width: 700px; margin: 0 auto;">
-                
-                <!-- Personal Information -->
+            <h2 data-translate="create_your_account">Create Your Account</h2>
+            <form onsubmit="event.preventDefault(); handleAccountCreation();" style="max-width: 700px; margin: 0 auto;">
                 <div class="form-section">
-                    <h3>Personal Information</h3>
+                    <h3 data-translate="personal_info">Personal Information</h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="firstname">First Name *</label>
+                            <label data-translate="first_name">First Name *</label>
                             <input type="text" id="firstname" required>
                         </div>
                         <div class="form-group">
-                            <label for="lastname">Last Name *</label>
+                            <label data-translate="last_name">Last Name *</label>
                             <input type="text" id="lastname" required>
                         </div>
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="gender">Gender *</label>
-                            <select id="gender" required>
-                                <option value="">Select gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                                <option value="prefer-not">Prefer not to say</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="dob">Date of Birth *</label>
-                            <input type="date" id="dob" required>
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label for="language">Preferred Language *</label>
-                        <select id="language" required>
-                            <option value="">Select language</option>
-                            <option value="arabic">Arabic</option>
+                        <label data-translate="preferred_language">Preferred Language *</label>
+                        <select id="language" required onchange="changeLanguage(this.value)">
+                            <option value="">Select language / اختر اللغة</option>
                             <option value="english">English</option>
-                            <option value="other">Other</option>
+                            <option value="arabic">العربية</option>
                         </select>
                     </div>
                 </div>
-
-                <!-- Contact Information -->
                 <div class="form-section">
-                    <h3>Contact Information</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" placeholder="Optional">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Username and Password -->
-                <div class="form-section">
+                    <h3 data-translate="contact_info">Contact Information</h3>
                     <div class="form-group">
-                        <label for="username">Username *</label>
+                        <label data-translate="email">Email Address *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="username">Username *</label>
                         <input type="text" id="username" required>
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="password">Password *</label>
-                            <input type="password" id="password" required>
-                            <small class="field-note">At least 8 characters</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirm-password">Confirm Password *</label>
-                            <input type="password" id="confirm-password" required>
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label for="security-question">Security Question *</label>
-                        <select id="security-question" required>
-                            <option value="">Select a security question</option>
-                            <option value="q1">What was the name of your first pet?</option>
-                            <option value="q2">What city were you born in?</option>
-                            <option value="q3">What is your mother's maiden name?</option>
-                            <option value="q4">What was the name of your first school?</option>
-                            <option value="q5">What is your favorite book?</option>
-                            <option value="q6">What was your childhood nickname?</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="security-answer">Security Answer *</label>
-                        <input type="text" id="security-answer" required>
+                        <label data-translate="password">Password *</label>
+                        <input type="password" id="password" required>
                     </div>
                 </div>
-
-                <!-- Emergency Contact -->
-                <div class="form-section">
-                    <h3>Emergency Contact</h3>
-                    <p class="section-note">This information will only be used in case of emergency (Optional)</p>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="emergency-name">Contact Name</label>
-                            <input type="text" id="emergency-name" placeholder="Optional">
-                        </div>
-                        <div class="form-group">
-                            <label for="emergency-phone">Contact Phone Number</label>
-                            <input type="tel" id="emergency-phone" placeholder="Optional">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Terms and Conditions -->
                 <div class="terms-box">
                     <label>
                         <input type="checkbox" required>
-                        <span>
-                            I agree to the Terms and Conditions and Privacy Policy. I understand that my information will be kept confidential and used only to provide mental health support services.
-                        </span>
+                        <span data-translate="terms_agree">I agree to the Terms and Conditions</span>
                     </label>
                 </div>
-
-                <button type="submit" class="button">Create Account</button>
+                <button type="submit" class="button" data-translate="create_account">Create Account</button>
                 <p style="text-align: center; margin-top: 20px;">
-                    <a class="back-link" onclick="showPage('page2')">← Back to Sign In</a>
-                </p>
-                <p style="text-align: center; margin-top: 10px;">
-                    <a class="back-link" onclick="showPage('page1')">← Back to Home</a>
+                    <a class="back-link" onclick="showPage('page2')" data-translate="back">← Back</a>
                 </p>
             </form>
         </div>
 
-        <!-- Page 4: Verification Message -->
+        <!-- Page 4: Email Verification -->
         <div class="page" id="page4">
             <div style="text-align: center; padding: 60px 20px;">
                 <div style="font-size: 60px; color: #1a7f37; margin-bottom: 30px;">✓</div>
-                <h2>Verify Your Email</h2>
-                <p style="color: #666; font-size: 16px; line-height: 1.8; max-width: 500px; margin: 30px auto;">
-                    A one-time code has been sent to your email address. Please check your inbox and click on the verification link to activate your account.
-                </p>
-                <p style="color: #666; font-size: 14px; margin-top: 30px;">
-                    After verification, you'll be able to sign in securely.
-                </p>
-                <button class="button" onclick="showPage('page2')" style="margin-top: 40px;">Return to Sign In</button>
-                <p style="text-align: center; margin-top: 20px;">
-                    <a class="back-link" onclick="showPage('page1')">← Back to Home</a>
-                </p>
+                <h2 data-translate="verify_email">Verify Your Email</h2>
+                <p style="color: #666; max-width: 500px; margin: 30px auto;" data-translate="verification_sent">A verification code has been sent to your email.</p>
+                <button class="button" onclick="showPage('page2')" style="margin-top: 40px;" data-translate="return_signin">Return to Sign In</button>
             </div>
         </div>
 
-        <!-- Page 5: How are you feeling -->
+        <!-- Page 5: AI Sentiment Analysis -->
         <div class="page" id="page5">
-            <h2>How are you feeling?</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 40px; font-size: 15px;">
-                Select what best describes how you're feeling right now
-            </p>
-
-            <form onsubmit="event.preventDefault(); showPage('page6');" style="max-width: 600px; margin: 0 auto;">
+            <h2>
+                <span data-translate="how_feeling">How are you feeling?</span>
+                <span class="ai-badge">🤖 AI POWERED</span>
+            </h2>
+            <form onsubmit="event.preventDefault(); analyzeSentiment();" style="max-width: 600px; margin: 0 auto;">
                 <div class="form-group">
-                    <label for="feeling">I'm feeling...</label>
+                    <label data-translate="im_feeling">I'm feeling...</label>
                     <select id="feeling" required>
-                        <option value="">Select an option</option>
-                        <option value="sad">Sad 😢</option>
-                        <option value="overwhelmed">Overwhelmed 😰</option>
-                        <option value="school-stress">School stress 📚</option>
-                        <option value="workplace-stress">Workplace stress 💼</option>
-                        <option value="family-stress">Family stress 👨‍👩‍👧</option>
-                        <option value="anxiety">Anxiety 😟</option>
-                        <option value="depression">Depression 😔</option>
-                        <option value="cannot-sleep">Cannot sleep 😴</option>
-                        <option value="panic-attack">Panic attack 😨</option>
-                        <option value="suicidal">Suicidal 💔</option>
-                        <option value="other">Other 🤔</option>
+                        <option value="" data-translate="select_option">Select an option</option>
+                        <option value="sad">
+                            😢 
+                            <span data-translate="sad">Sad</span>
+                        </option>
+                        <option value="overwhelmed">
+                            😰 
+                            <span data-translate="overwhelmed">Overwhelmed</span>
+                        </option>
+                        <option value="school-stress">
+                            📚 
+                            <span data-translate="school_stress">School stress</span>
+                        </option>
+                        <option value="workplace-stress">
+                            💼 
+                            <span data-translate="workplace_stress">Workplace stress</span>
+                        </option>
+                        <option value="family-stress">
+                            👨‍👩‍👧 
+                            <span data-translate="family_stress">Family stress</span>
+                        </option>
+                        <option value="anxiety">
+                            😟 
+                            <span data-translate="anxiety">Anxiety</span>
+                        </option>
+                        <option value="depression">
+                            😔 
+                            <span data-translate="depression">Depression</span>
+                        </option>
+                        <option value="cannot-sleep">
+                            😴 
+                            <span data-translate="cannot_sleep">Cannot sleep</span>
+                        </option>
+                        <option value="panic-attack">
+                            😨 
+                            <span data-translate="panic_attack">Panic attack</span>
+                        </option>
+                        <option value="suicidal">
+                            💔 
+                            <span data-translate="suicidal">Suicidal</span>
+                        </option>
+                        <option value="other">
+                            🤔 
+                            <span data-translate="other">Other</span>
+                        </option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label for="additional-details">Additional details (optional)</label>
-                    <textarea id="additional-details" placeholder="Share as much or as little as you're comfortable with..." style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 5px; font-size: 15px; font-family: Arial, sans-serif; min-height: 150px; resize: vertical;"></textarea>
+                    <label data-translate="additional_details">Additional details (optional)</label>
+                    <textarea id="additional-details" placeholder="Share as much or as little as you're comfortable with..."></textarea>
                 </div>
-
-                <button type="submit" class="button">Continue</button>
+                <div id="sentiment-result"></div>
+                <button type="submit" class="button" data-translate="continue">Continue</button>
                 <p style="text-align: center; margin-top: 20px;">
-                    <a class="back-link" onclick="showPage('page1')">← Back to Home</a>
+                    <a class="back-link" onclick="showPage('page1')" data-translate="back_home">← Back to Home</a>
                 </p>
             </form>
         </div>
 
-        <!-- Page 6: Type of support requested -->
+        <!-- Page 6: Support Options -->
         <div class="page" id="page6">
-            <h2>Type of support requested</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 40px; font-size: 15px;">
-                Select the type of support you need (you can choose multiple options)
-            </p>
-
+            <h2 data-translate="support_type">Type of support requested</h2>
             <form onsubmit="event.preventDefault(); handleSupportSelection();" style="max-width: 600px; margin: 0 auto;">
                 <div style="background: #f8f9fa; padding: 30px; border-radius: 8px; margin-bottom: 20px;">
                     <label style="display: flex; align-items: center; padding: 15px; cursor: not-allowed; opacity: 0.5;">
                         <input type="checkbox" disabled style="margin-right: 15px; width: 20px; height: 20px;">
-                        <span style="font-size: 16px; color: #333;">Resources (Coming soon)</span>
+                        <span style="font-size: 16px;" data-translate="resources_coming">Resources (Coming soon)</span>
                     </label>
-
                     <label style="display: flex; align-items: center; padding: 15px; cursor: not-allowed; opacity: 0.5;">
                         <input type="checkbox" disabled style="margin-right: 15px; width: 20px; height: 20px;">
-                        <span style="font-size: 16px; color: #333;">Counselor (Coming soon)</span>
+                        <span style="font-size: 16px;" data-translate="counselor_coming">Counselor (Coming soon)</span>
                     </label>
-
-                    <label style="display: flex; align-items: center; padding: 15px; cursor: pointer; background: white; border-radius: 5px; border: 2px solid #e0e0e0; transition: all 0.3s;">
+                    <label style="display: flex; align-items: center; padding: 15px; cursor: pointer; background: white; border-radius: 5px; border: 2px solid #e0e0e0;">
                         <input type="checkbox" id="healthcare-check" style="margin-right: 15px; width: 20px; height: 20px; cursor: pointer;">
-                        <span style="font-size: 16px; color: #333; font-weight: 600;">Health Care Facilities</span>
+                        <span style="font-size: 16px; font-weight: 600;" data-translate="healthcare_facilities">Health Care Facilities</span>
                     </label>
                 </div>
-
-                <button type="submit" class="button">Continue</button>
+                <button type="submit" class="button" data-translate="continue">Continue</button>
                 <p style="text-align: center; margin-top: 20px;">
-                    <a class="back-link" onclick="showPage('page1')">← Back to Home</a>
+                    <a class="back-link" onclick="showPage('page5')" data-translate="back">← Back</a>
                 </p>
             </form>
         </div>
 
-        <!-- Page 7: Health Care Facilities Map -->
+        <!-- Page 7: Facilities with Simple Map -->
         <div class="page" id="page7">
-            <h2>Health Care Facilities</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 15px;">
-                Find government mental health facilities near you
-            </p>
-
+            <h2 data-translate="healthcare_facilities">Health Care Facilities</h2>
             <div style="max-width: 900px; margin: 0 auto;">
-                <!-- Location Search -->
                 <div style="margin-bottom: 30px;">
                     <div class="form-group">
-                        <label for="location-search">Enter your location</label>
+                        <label data-translate="enter_location">Enter your location</label>
                         <div style="display: flex; gap: 10px;">
-                            <input type="text" id="location-search" placeholder="City or Region (e.g., Riyadh, Jeddah, Dammam)" style="flex: 1;">
-                            <button class="button" onclick="searchLocation()" style="margin: 0; padding: 12px 30px;">Search</button>
+                            <input type="text" id="location-search" placeholder="City or Region" style="flex: 1;">
+                            <button class="button" onclick="searchLocation()" style="margin: 0; padding: 12px 30px;" data-translate="search">Search</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Map Placeholder -->
-                <div style="background: #e8f5e9; border: 2px solid #1a7f37; border-radius: 8px; height: 400px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; position: relative;">
-                    <div style="text-align: center; color: #1a7f37;">
-                        <div style="font-size: 48px; margin-bottom: 15px;">🗺️</div>
-                        <p style="font-size: 16px; font-weight: 600;">Interactive Map</p>
-                        <p style="font-size: 14px; margin-top: 10px;">Enter your location above to find nearby facilities</p>
+                <div class="map-container">
+                    <div class="map-placeholder">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        <h3 style="margin-bottom: 10px;" data-translate="map_title">Mental Health Facilities Map</h3>
+                        <p data-translate="map_subtitle">Search for your city to find the nearest facility</p>
+                        <div id="distance-info" style="margin-top: 15px; font-weight: bold; color: #1a7f37;"></div>
                     </div>
                 </div>
 
-                <!-- Facilities List -->
-                <h3 style="font-size: 20px; color: #1a7f37; margin-bottom: 20px;">Government Mental Health Facilities in Saudi Arabia</h3>
-                
-                <div style="display: grid; gap: 20px;">
-                    <!-- Al-Amal Hospital Riyadh -->
-                    <div style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='#1a7f37'" onmouseout="this.style.borderColor='#e0e0e0'">
-                        <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">Al-Amal Hospital - Riyadh</h4>
-                        <p style="color: #666; font-size: 14px; margin-bottom: 8px;">📍 Riyadh</p>
-                        <p style="color: #666; font-size: 14px; line-height: 1.6;">Psychiatric treatment and addiction services</p>
-                    </div>
+                <h3 style="font-size: 20px; color: #1a7f37; margin: 30px 0 20px;" data-translate="government_facilities">Government Mental Health Facilities</h3>
 
-                    <!-- Al-Amal Hospital Jeddah -->
-                    <div style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='#1a7f37'" onmouseout="this.style.borderColor='#e0e0e0'">
-                        <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">Al-Amal Hospital - Jeddah</h4>
-                        <p style="color: #666; font-size: 14px; margin-bottom: 8px;">📍 Jeddah</p>
-                        <p style="color: #666; font-size: 14px; line-height: 1.6;">Psychiatric treatment and addiction services</p>
-                    </div>
+                <div class="facility-card" data-city="riyadh" data-lat="24.7136" data-lng="46.6753" onclick="selectFacility(this)">
+                    <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">🏥 Al-Amal Hospital - Riyadh</h4>
+                    <p style="color: #666; font-size: 14px;">📍 Riyadh | Psychiatric treatment and addiction services</p>
+                    <p style="color: #999; font-size: 13px; margin-top: 8px;">📞 Phone: +966 11 234 5678</p>
+                    <span class="distance-badge" style="display: none;"></span>
+                </div>
 
-                    <!-- Al-Amal Hospital Dammam -->
-                    <div style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='#1a7f37'" onmouseout="this.style.borderColor='#e0e0e0'">
-                        <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">Al-Amal Hospital - Dammam</h4>
-                        <p style="color: #666; font-size: 14px; margin-bottom: 8px;">📍 Dammam</p>
-                        <p style="color: #666; font-size: 14px; line-height: 1.6;">Psychiatric treatment and addiction services</p>
-                    </div>
+                <p style="text-align: center; margin-top: 30px;">
+                    <a class="back-link" onclick="showPage('page6')" data-translate="back_support">← Back to Support Options</a>
+                </p>
+                <p style="text-align: center; margin-top: 10px;">
+                    <a class="back-link" onclick="showPage('page1')" data-translate="back_home">← Back to Home</a>
+                </p>
+            </div>
+        </div>
+    </div>
 
-                    <!-- Al-Qaseem Psychiatric Rehabilitation Center -->
-                    <div style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='#1a7f37'" onmouseout="this.style.borderColor='#e0e0e0'">
-                        <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">Al-Qaseem Psychiatric Rehabilitation Center</h4>
-                        <p style="color: #666; font-size: 14px; margin-bottom: 8px;">📍 Buraidah</p>
-                        <p style="color: #666; font-size: 14px; line-height: 1.6;">Psychiatric rehabilitation services</p>
-                    </div>
+    <!-- AI-Powered Chatbot (Feature #2) -->
+    <button class="chatbot-button" onclick="toggleChatbot()">💬</button>
+    <div class="chatbot-window" id="chatbot">
+        <div class="chatbot-header">
+            <span>
+                <span id="chatbot-title">Mental Health Support</span>
+                <span class="ai-badge" style="font-size: 9px; padding: 3px 8px;">AI</span>
+            </span>
+            <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+        </div>
+        <div class="chatbot-messages" id="chatMessages"></div>
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
 
-                    <!-- King Faisal Specialist Hospital -->
-                    <div style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='#1a7f37'" onmouseout="this.style.borderColor='#e0e0e0'">
-                        <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">King Faisal Specialist Hospital & Research Center</h4>
-                        <p style="color: #666; font-size: 14px; margin-bottom: 8px;">📍 Riyadh</p>
-                        <p style="color: #666; font-size: 14px; line-height: 1.6;">Mental Health Department with specialized psychiatric services</p>
-                    </div>
+    <script>
+    var currentLang = 'english';
+    var userLocation = null;
+    var chatHistory = [];
 
-                    <!-- MOH Psychiatric Hospitals -->
-                    <div style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='#1a7f37
+    // Complete translations object
+    var translations = {
+        english: {
+            home_title: 'National Center for Mental Health<br>in Saudi Arabia',
+            home_description: 'Welcome to the confidential user-friendly platform that encourages seeking support and makes it simple and accessible to all. Our core feature is the <strong>AI-Empowered Triage center</strong>, a platform that acts as your private decision-making tool.',
+            get_started: 'Get Started',
+            welcome: 'Welcome',
+            signin: 'Sign In',
+            signup: 'Sign Up',
+            username: 'Username',
+            password: 'Password',
+            login: 'Log In',
+            forgot_password: 'Forgot your password?',
+            reset_password: 'Reset Your Password',
+            email_or_username: 'Email Address or Username',
+            send_reset: 'Send Reset Link',
+            back_signin: '← Back to Sign In',
+            signup_message: 'Ready to begin your journey to better mental health?<br>Create your account to access personalized support and resources.',
+            create_account: 'Create Account',
+            back_home: '← Back to Home',
+            create_your_account: 'Create Your Account',
+            personal_info: 'Personal Information',
+            first_name: 'First Name *',
+            last_name: 'Last Name *',
+            preferred_language: 'Preferred Language *',
+            contact_info: 'Contact Information',
+            email: 'Email Address *',
+            terms_agree: 'I agree to the Terms and Conditions',
+            back: '← Back',
+            verify_email: 'Verify Your Email',
+            verification_sent: 'A verification code has been sent to your email.',
+            return_signin: 'Return to Sign In',
+            how_feeling: 'How are you feeling?',
+            im_feeling: "I'm feeling...",
+            select_option: 'Select an option',
+            sad: 'Sad',
+            overwhelmed: 'Overwhelmed',
+            school_stress: 'School stress',
+            workplace_stress: 'Workplace stress',
+            family_stress: 'Family stress',
+            anxiety: 'Anxiety',
+            depression: 'Depression',
+            cannot_sleep: 'Cannot sleep',
+            panic_attack: 'Panic attack',
+            suicidal: 'Suicidal',
+            other: 'Other',
+            additional_details: 'Additional details (optional)',
+            continue: 'Continue',
+            support_type: 'Type of support requested',
+            resources_coming: 'Resources (Coming soon)',
+            counselor_coming: 'Counselor (Coming soon)',
+            healthcare_facilities: 'Health Care Facilities',
+            enter_location: 'Enter your location',
+            search: 'Search',
+            government_facilities: 'Government Mental Health Facilities',
+            back_support: '← Back to Support Options',
+            map_title: 'Mental Health Facilities Map',
+            map_subtitle: 'Search for your city to find the nearest facility',
+            reset_link_sent: 'Password reset link sent to your email!',
+            signin_success: '✓ Sign in successful!',
+            signin_error: '✗ Invalid credentials. Please try again.',
+            location_prompt: 'Please enter your location',
+            select_support: 'Please select at least one support option',
+            sentiment_positive: '✓ AI Analysis: Your message shows resilience and hope. You\'re taking positive steps forward.',
+            sentiment_neutral: '⚠ AI Analysis: You seem to be processing complex feelings. That\'s completely normal.',
+            sentiment_negative: '⚠ AI Analysis: We detect you may need urgent support. Please don\'t hesitate to reach out for help.',
+            nearest_facility: 'Nearest facility:',
+            km_away: 'km away',
+            // Chatbot responses
+            chat_greeting: 'Hello! I\'m your AI mental health assistant. 🤖 I can help you with:\n\n• Finding mental health resources\n• Understanding your feelings\n• Connecting with facilities\n• Crisis support\n\nHow can I help you today?',
+            crisis_response: '🚨 I understand you\'re in crisis. Your life matters.\n\nPLEASE CALL: 920033360 (Saudi Mental Health Hotline) - Available 24/7\n\nYou can also text them. Would you like me to show you nearby emergency facilities?',
+            anxiety_response: '😰 Anxiety can feel overwhelming, but you\'re not alone.\n\n✨ Try this now:\n• Breathe in slowly for 4 counts\n• Hold for 4 counts\n• Exhale for 4 counts\n• Repeat 5 times\n\nWould you like to see our anxiety management resources or speak with a professional?',
+            depression_response: '💙 Thank you for sharing. Depression is a real medical condition, and it\'s treatable.\n\nYou deserve support. Our facilities offer:\n• Professional counseling\n• Medical treatment\n• Support groups\n\nWould you like to see nearby mental health centers?',
+            stress_response: '😓 Stress affects everyone differently. Let me help you find the right support.\n\nWhat type of stress are you experiencing?\n• Work/School\n• Family\n• Financial\n• Health\n\nI can provide tailored coping strategies.',
+            sleep_response: '😴 Sleep issues often connect to mental health.\n\n💡 Tips for better sleep:\n• Stick to a schedule\n• Avoid screens 1hr before bed\n• Create a calming routine\n• Keep room cool & dark\n\nIf this persists, our specialists can help. Would you like to book a consultation?',
+            facilities_response: '🏥 I can show you mental health facilities in Saudi Arabia.\n\nWe have centers in:\n• Riyadh - Al-Amal Hospital\n• Jeddah - Al-Amal Hospital\n• Dammam - Al-Amal Hospital\n\nWhich city are you closest to, or would you like to see all locations?',
+            thank_response: '💚 You\'re very welcome! Remember:\n\n✨ Seeking help is a sign of STRENGTH, not weakness\n✨ You don\'t have to face this alone\n✨ Recovery is possible\n\nI\'m always here if you need support. Take care of yourself!',
+            help_response: '🤝 I\'m here to support you. I can help with:\n\n1️⃣ Crisis support & emergency contacts\n2️⃣ Understanding mental health conditions\n3️⃣ Finding nearby facilities\n4️⃣ Coping strategies & techniques\n5️⃣ Booking appointments\n\nWhat would be most helpful for you right now?',
+            default_response: 'I\'m listening. 👂 Your feelings are valid.\n\nCould you tell me more about what you\'re experiencing? The more you share, the better I can help you find the right support.',
+            how_can_help: 'How can I help you?',
+            im_thinking: 'I\'m thinking...'
+        },
+        arabic: {
+            home_title: 'المركز الوطني للصحة النفسية<br>في المملكة العربية السعودية',
+            home_description: 'مرحباً بك في المنصة السرية وسهلة الاستخدام التي تشجع على طلب الدعم وتجعله بسيطاً ومتاحاً للجميع. ميزتنا الأساسية هي <strong>مركز الفرز المدعوم بالذكاء الاصطناعي</strong>، منصة تعمل كأداة خاصة لاتخاذ القرار.',
+            get_started: 'ابدأ الآن',
+            welcome: 'مرحباً',
+            signin: 'تسجيل الدخول',
+            signup: 'إنشاء حساب',
+            username: 'اسم المستخدم',
+            password: 'كلمة المرور',
+            login: 'تسجيل الدخول',
+            forgot_password: 'هل نسيت كلمة المرور؟',
+            reset_password: 'إعادة تعيين كلمة المرور',
+            email_or_username: 'البريد الإلكتروني أو اسم المستخدم',
+            send_reset: 'إرسال رابط إعادة التعيين',
+            back_signin: '→ العودة لتسجيل الدخول',
+            signup_message: 'هل أنت مستعد لبدء رحلتك نحو صحة نفسية أفضل؟<br>أنشئ حسابك للوصول إلى الدعم والموارد المخصصة.',
+            create_account: 'إنشاء حساب',
+            back_home: '→ العودة للرئيسية',
+            create_your_account: 'إنشاء حسابك',
+            personal_info: 'المعلومات الشخصية',
+            first_name: 'الاسم الأول *',
+            last_name: 'اسم العائلة *',
+            preferred_language: 'اللغة المفضلة *',
+            contact_info: 'معلومات الاتصال',
+            email: 'البريد الإلكتروني *',
+            terms_agree: 'أوافق على الشروط والأحكام',
+            back: '→ رجوع',
+            verify_email: 'تحقق من بريدك الإلكتروني',
+            verification_sent: 'تم إرسال رمز التحقق إلى بريدك الإلكتروني.',
+            return_signin: 'العودة لتسجيل الدخول',
+            how_feeling: 'كيف تشعر؟',
+            im_feeling: 'أنا أشعر...',
+            select_option: 'اختر خياراً',
+            sad: 'حزين',
+            overwhelmed: 'مرهق',
+            school_stress: 'ضغط دراسي',
+            workplace_stress: 'ضغط العمل',
+            family_stress: 'ضغط عائلي',
+            anxiety: 'قلق',
+            depression: 'اكتئاب',
+            cannot_sleep: 'لا أستطيع النوم',
+            panic_attack: 'نوبة هلع',
+            suicidal: 'أفكار انتحارية',
+            other: 'أخرى',
+            additional_details: 'تفاصيل إضافية (اختياري)',
+            continue: 'متابعة',
+            support_type: 'نوع الدعم المطلوب',
+            resources_coming: 'الموارد (قريباً)',
+            counselor_coming: 'المستشار (قريباً)',
+            healthcare_facilities: 'المرافق الصحية',
+            enter_location: 'أدخل موقعك',
+            search: 'بحث',
+            government_facilities: 'مرافق الصحة النفسية الحكومية',
+            back_support: '→ العودة لخيارات الدعم',
+            map_title: 'خريطة مرافق الصحة النفسية',
+            map_subtitle: 'ابحث عن مدينتك لإيجاد أقرب مرفق',
+            reset_link_sent: 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك!',
+            signin_success: '✓ تم تسجيل الدخول بنجاح!',
+            signin_error: '✗ بيانات الدخول غير صحيحة. يرجى المحاولة مرة أخرى.',
+            location_prompt: 'الرجاء إدخال موقعك',
+            select_support: 'الرجاء اختيار خيار دعم واحد على الأقل',
+            sentiment_positive: '✓ تحليل الذكاء الاصطناعي: رسالتك تظهر المرونة والأمل. أنت تتخذ خطوات إيجابية للأمام.',
+            sentiment_neutral: '⚠ تحليل الذكاء الاصطناعي: يبدو أنك تعالج مشاعر معقدة. هذا طبيعي تماماً.',
+            sentiment_negative: '⚠ تحليل الذكاء الاصطناعي: نكتشف أنك قد تحتاج إلى دعم عاجل. لا تتردد في طلب المساعدة.',
+            nearest_facility: 'أقرب مرفق:',
+            km_away: 'كم',
+            // Chatbot responses in Arabic
+            chat_greeting: 'مرحباً! أنا مساعد الصحة النفسية بالذكاء الاصطناعي. 🤖 يمكنني مساعدتك في:\n\n• إيجاد موارد الصحة النفسية\n• فهم مشاعرك\n• التواصل مع المرافق\n• الدعم في الأزمات\n\nكيف يمكنني مساعدتك اليوم؟',
+            crisis_response: '🚨 أفهم أنك في أزمة. حياتك مهمة.\n\nالرجاء الاتصال: 920033360 (خط المساعدة للصحة النفسية) - متاح على مدار الساعة\n\nيمكنك أيضاً مراسلتهم. هل تريد مني إظهار مرافق الطوارئ القريبة؟',
+            anxiety_response: '😰 القلق قد يكون مرهقاً، لكنك لست وحدك.\n\n✨ جرب هذا الآن:\n• استنشق ببطء لمدة 4 عدات\n• احبس لمدة 4 عدات\n• ازفر لمدة 4 عدات\n• كرر 5 مرات\n\nهل تريد رؤية موارد إدارة القلق أو التحدث مع متخصص؟',
+            depression_response: '💙 شكراً على مشاركتك. الاكتئاب حالة طبية حقيقية، ويمكن علاجها.\n\nتستحق الدعم. تقدم مرافقنا:\n• استشارات مهنية\n• علاج طبي\n• مجموعات دعم\n\nهل تريد رؤية مراكز الصحة النفسية القريبة؟',
+            stress_response: '😓 الضغط يؤثر على الجميع بشكل مختلف. دعني أساعدك في إيجاد الدعم المناسب.\n\nما نوع الضغط الذي تعاني منه؟\n• العمل/الدراسة\n• العائلة\n• المالي\n• الصحة\n\nيمكنني توفير استراتيجيات تأقلم مخصصة.',
+            sleep_response: '😴 مشاكل النوم غالباً ما ترتبط بالصحة النفسية.\n\n💡 نصائح لنوم أفضل:\n• التزم بجدول منتظم\n• تجنب الشاشات قبل النوم بساعة\n• أنشئ روتين مهدئ\n• حافظ على برودة الغرفة وظلامها\n\nإذا استمر هذا، يمكن للمتخصصين لدينا المساعدة. هل تريد حجز استشارة؟',
+            facilities_response: '🏥 يمكنني إظهار مرافق الصحة النفسية في السعودية.\n\nلدينا مراكز في:\n• الرياض - مستشفى الأمل\n• جدة - مستشفى الأمل\n• الدمام - مستشفى الأمل\n\nأي مدينة أقرب لك، أم تريد رؤية جميع المواقع؟',
+            thank_response: '💚 على الرحب والسعة! تذكر:\n\n✨ طلب المساعدة علامة على القوة، وليس الضعف\n✨ لا يجب أن تواجه هذا وحدك\n✨ التعافي ممكن\n\nأنا دائماً هنا إذا احتجت للدعم. اعتن بنفسك!',
+            help_response: '🤝 أنا هنا لدعمك. يمكنني المساعدة في:\n\n1️⃣ دعم الأزمات وجهات الاتصال الطارئة\n2️⃣ فهم حالات الصحة النفسية\n3️⃣ إيجاد المرافق القريبة\n4️⃣ استراتيجيات وتقنيات التأقلم\n5️⃣ حجز المواعيد\n\nما الذي سيكون أكثر فائدة لك الآن؟',
+            default_response: 'أنا أستمع. 👂 مشاعرك صحيحة.\n\nهل يمكنك إخباري المزيد عما تمر به؟ كلما شاركت أكثر، كلما تمكنت من مساعدتك بشكل أفضل في إيجاد الدعم المناسب.',
+            how_can_help: 'كيف يمكنني مساعدتك؟',
+            im_thinking: 'أنا أفكر...'
+        }
+    };
+
+    // City coordinates for distance calculation
+    var cities = {
+        'riyadh': {
+            lat: 24.7136,
+            lng: 46.6753,
+            ar: 'الرياض'
+        },
+        'jeddah': {
+            lat: 21.5433,
+            lng: 39.1728,
+            ar: 'جدة'
+        },
+        'dammam': {
+            lat: 26.4207,
+            lng: 50.0888,
+            ar: 'الدمام'
+        },
+        'mecca': {
+            lat: 21.4225,
+            lng: 39.8262,
+            ar: 'مكة'
+        },
+        'medina': {
+            lat: 24.5247,
+            lng: 39.5692,
+            ar: 'المدينة'
+        },
+        'khobar': {
+            lat: 26.2172,
+            lng: 50.1971,
+            ar: 'الخبر'
+        },
+        'tabuk': {
+            lat: 28.3838,
+            lng: 36.5550,
+            ar: 'تبوك'
+        },
+        'abha': {
+            lat: 18.2164,
+            lng: 42.5053,
+            ar: 'أبها'
+        }
+    };
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function showTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById(tab + '-content').classList.add('active');
+        hideForgotPassword();
+    }
+
+    function showForgotPassword() {
+        document.getElementById('forgot-section').classList.add('active');
+    }
+
+    function hideForgotPassword() {
+        document.getElementById('forgot-section').classList.remove('active');
+    }
+
+    function sendResetLink() {
+        alert(translations[currentLang].reset_link_sent);
+        hideForgotPassword();
+    }
+
+    function handleSignIn() {
+        var u = document.getElementById('signin-username').value;
+        var p = document.getElementById('signin-password').value;
+        var m = document.getElementById('signin-message');
+
+        if (u.toLowerCase() === 'bitaintech' && p === 'BitainTech1234!') {
+            m.style.display = 'block';
+            m.style.backgroundColor = '#d4edda';
+            m.style.color = '#155724';
+            m.textContent = translations[currentLang].signin_success;
+            setTimeout(() => showPage('page5'), 1500);
+        } else {
+            m.style.display = 'block';
+            m.style.backgroundColor = '#f8d7da';
+            m.style.color = '#721c24';
+            m.textContent = translations[currentLang].signin_error;
+        }
+    }
+
+    function handleAccountCreation() {
+        var lang = document.getElementById('language').value;
+        if (lang) {
+            currentLang = lang;
+            changeLanguage(lang);
+            showPage('page4');
+        }
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        if (lang === 'arabic') {
+            document.body.classList.add('rtl');
+        } else {
+            document.body.classList.remove('rtl');
+        }
+        updateTranslations();
+    }
+
+    function updateTranslations() {
+        // Update all elements with data-translate attribute
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            var key = el.getAttribute('data-translate');
+            if (translations[currentLang][key]) {
+                el.innerHTML = translations[currentLang][key];
+            }
+        });
+
+        // Update chatbot title
+        var chatTitle = currentLang === 'arabic' ? 'دعم الصحة النفسية' : 'Mental Health Support';
+        document.getElementById('chatbot-title').textContent = chatTitle;
+
+        // Update input placeholders
+        document.getElementById('chatInput').placeholder =
+        currentLang === 'arabic' ? 'اكتب رسالة...' : 'Type a message...';
+        document.getElementById('location-search').placeholder =
+        currentLang === 'arabic' ? 'المدينة أو المنطقة' : 'City or Region';
+        document.getElementById('additional-details').placeholder =
+        currentLang === 'arabic' ? 'شارك بقدر ما تشعر بالراحة...' : 'Share as much or as little as you\'re comfortable with...';
+    }
+
+    // AI Feature #1: Sentiment Analysis with keyword detection
+    function analyzeSentiment() {
+        var feeling = document.getElementById('feeling').value;
+        var details = document.getElementById('additional-details').value.toLowerCase();
+        var result = document.getElementById('sentiment-result');
+
+        // Keyword arrays for sentiment analysis
+        var negativeWords = ['hopeless', 'suicidal', 'die', 'kill', 'end', 'pain', 'suffer', 'alone', 'worthless', 'hate', 'awful', 'terrible',
+        'يائس', 'انتحار', 'موت', 'قتل', 'نهاية', 'ألم', 'معاناة', 'وحيد', 'عديم القيمة', 'أكره', 'فظيع'];
+        var positiveWords = ['hope', 'better', 'trying', 'help', 'support', 'improve', 'grateful', 'thanks', 'progress', 'happy',
+        'أمل', 'أفضل', 'محاولة', 'مساعدة', 'دعم', 'تحسين', 'ممتن', 'شكراً', 'تقدم', 'سعيد'];
+
+        var sentiment = 'neutral';
+        var score = 0;
+
+        // High priority: check feeling selection
+        if (feeling === 'suicidal' || feeling === 'panic-attack') {
+            sentiment = 'negative';
+            score = -10;
+        } else if (feeling === 'depression' || feeling === 'anxiety') {
+            score -= 3;
+        } else if (feeling === 'sad' || feeling === 'overwhelmed') {
+            score -= 2;
+        }
+
+        // Analyze text details
+        negativeWords.forEach(word => {
+            if (details.includes(word))
+                score -= 1;
+        });
+        positiveWords.forEach(word => {
+            if (details.includes(word))
+                score += 1;
+        });
+
+        // Determine final sentiment
+        if (score >= 2)
+            sentiment = 'positive';
+        else if (score <= -3)
+            sentiment = 'negative';
+
+        var sentimentClass = 'sentiment-' + sentiment;
+        var message = translations[currentLang]['sentiment_' + sentiment];
+
+        result.innerHTML = '<div class="sentiment-indicator ' + sentimentClass + '">' + message + '</div>';
+
+        setTimeout(() => showPage('page6'), 2500);
+    }
+
+    function handleSupportSelection() {
+        if (document.getElementById('healthcare-check').checked) {
+            showPage('page7');
+        } else {
+            alert(translations[currentLang].select_support);
+        }
+    }
+
+    // Calculate distance between two coordinates (Haversine formula)
+    function getDistance(lat1, lng1, lat2, lng2) {
+        var R = 6371; // Earth's radius in km
+        var dLat = (lat2 - lat1) * Math.PI / 180;
+        var dLng = (lng2 - lng1) * Math.PI / 180;
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    function searchLocation() {
+        var loc = document.getElementById('location-search').value.toLowerCase().trim();
+        if (!loc) {
+            alert(translations[currentLang].location_prompt);
+            return;
+        }
+
+        // Find matching city
+        var cityData = null;
+        for (var city in cities) {
+            if (loc.includes(city) || loc.includes(cities[city].ar)) {
+                cityData = cities[city];
+                cityData.name = city;
+                break;
+            }
+        }
+
+        if (!cityData) {
+            // Default to Riyadh if city not found
+            cityData = cities['riyadh'];
+            cityData.name = 'riyadh';
+            alert((currentLang === 'arabic' ? 'لم يتم العثور على المدينة. إظهار النتائج من الرياض.' : 'City not found. Showing results from Riyadh.'));
+        }
+
+        userLocation = cityData;
+
+        // Calculate distances and update UI
+        var facilities = document.querySelectorAll('.facility-card');
+        var nearest = null;
+        var minDist = Infinity;
+
+        facilities.forEach(function(card) {
+            var facLat = parseFloat(card.getAttribute('data-lat'));
+            var facLng = parseFloat(card.getAttribute('data-lng'));
+            var distance = getDistance(cityData.lat, cityData.lng, facLat, facLng);
+
+            var badge = card.querySelector('.distance-badge');
+            badge.style.display = 'inline-block';
+            badge.textContent = distance.toFixed(1) + ' ' + (currentLang === 'arabic' ? 'كم' : 'km');
+
+            if (distance < minDist) {
+                minDist = distance;
+                nearest = card;
+            }
+        });
+
+        // Highlight nearest facility
+        facilities.forEach(card => card.classList.remove('selected'));
+        if (nearest) {
+            nearest.classList.add('selected');
+            nearest.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+
+        // Update map info
+        var distInfo = document.getElementById('distance-info');
+        distInfo.textContent = (currentLang === 'arabic' ? 'أقرب مرفق: ' : 'Nearest facility: ') +
+        minDist.toFixed(1) + ' ' +
+        (currentLang === 'arabic' ? 'كم' : 'km away');
+    }
+
+    function selectFacility(card) {
+        document.querySelectorAll('.facility-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+    }
+
+    // AI Feature #2: Intelligent Chatbot with context awareness
+    function toggleChatbot() {
+        var chatbot = document.getElementById('chatbot');
+        chatbot.classList.toggle('open');
+        if (chatbot.classList.contains('open') && document.getElementById('chatMessages').children.length === 0) {
+            addBotMessage(translations[currentLang].chat_greeting);
+        }
+    }
+
+    function sendMessage() {
+        var input = document.getElementById('chatInput');
+        var msg = input.value.trim();
+        if (msg) {
+            addUserMessage(msg);
+            chatHistory.push({
+                role: 'user',
+                message: msg
+            });
+            input.value = '';
+
+            // Show typing indicator
+            var typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot typing-indicator-msg';
+            typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            document.getElementById('chatMessages').appendChild(typingDiv);
+            document.getElementById('chatMessages').scrollTop = 999999;
+
+            setTimeout(() => {
+                typingDiv.remove();
+                respondToMessage(msg);
+            }, 1000);
+        }
+    }
+
+    function addUserMessage(text) {
+        var div = document.createElement('div');
+        div.className = 'message user';
+        div.textContent = text;
+        document.getElementById('chatMessages').appendChild(div);
+        document.getElementById('chatMessages').scrollTop = 999999;
+    }
+
+    function addBotMessage(text) {
+        var div = document.createElement('div');
+        div.className = 'message bot';
+        div.style.whiteSpace = 'pre-line'; // Preserve line breaks
+        div.textContent = text;
+        document.getElementById('chatMessages').appendChild(div);
+        chatHistory.push({
+            role: 'bot',
+            message: text
+        });
+        document.getElementById('chatMessages').scrollTop = 999999;
+    }
+
+    function respondToMessage(msg) {
+        var msgLower = msg.toLowerCase();
+        var response = '';
+
+        // Define keyword categories for intelligent matching
+        var crisisKeywords = ['suicide', 'suicidal', 'kill myself', 'end my life', 'die', 'death', 'want to die',
+        'انتحار', 'اقتل نفسي', 'انهاء حياتي', 'موت', 'أريد أن أموت', 'الموت'];
+
+        var anxietyKeywords = ['anxious', 'anxiety', 'panic', 'worry', 'worried', 'scared', 'fear', 'nervous', 'stress',
+        'قلق', 'قلقان', 'هلع', 'خائف', 'خوف', 'توتر', 'متوتر'];
+
+        var depressionKeywords = ['depressed', 'depression', 'sad', 'sadness', 'hopeless', 'lonely', 'empty', 'numb',
+        'اكتئاب', 'مكتئب', 'حزين', 'حزن', 'يائس', 'وحيد', 'فراغ'];
+
+        var stressKeywords = ['stress', 'stressed', 'overwhelmed', 'pressure', 'tired', 'exhausted', 'burnout',
+        'ضغط', 'مضغوط', 'مرهق', 'تعب', 'متعب', 'إرهاق'];
+
+        var sleepKeywords = ['sleep', 'sleeping', 'insomnia', 'cant sleep', 'cannot sleep', 'tired', 'awake',
+        'نوم', 'أرق', 'لا أستطيع النوم', 'ما أقدر أنام'];
+
+        var facilitiesKeywords = ['facility', 'facilities', 'hospital', 'center', 'clinic', 'location', 'where', 'find',
+        'مرفق', 'مرافق', 'مستشفى', 'مركز', 'عيادة', 'موقع', 'أين', 'ابحث'];
+
+        var thankKeywords = ['thank', 'thanks', 'appreciate', 'grateful', 'شكر', 'شكراً', 'اشكرك', 'ممتن'];
+
+        var helpKeywords = ['help', 'مساعدة', 'ساعدني', 'need help', 'can you help'];
+
+        var greetingKeywords = ['hello', 'hi', 'hey', 'مرحبا', 'السلام', 'أهلا'];
+
+        // Check for greetings
+        if (greetingKeywords.some(word => msgLower.includes(word)) && chatHistory.length <= 2) {
+            response = translations[currentLang].chat_greeting;
+        }
+
+        else // Check for crisis (highest priority)
+        if (crisisKeywords.some(word => msgLower.includes(word))) {
+            response = translations[currentLang].crisis_response;
+        }
+
+        else // Check for anxiety
+        if (anxietyKeywords.some(word => msgLower.includes(word))) {
+            response = translations[currentLang].anxiety_response;
+        }
+
+        else // Check for depression
+        if (depressionKeywords.some(word => msgLower.includes(word))) {
+            response = translations[currentLang].depression_response;
+        }
+
+        else // Check for stress
+        if (stressKeywords.some(word => msgLower.includes(word))) {
+            response = translations[currentLang].stress_response;
+        }
+
+        else // Check for sleep issues
+        if (sleepKeywords.some(word => msgLower.includes(word))) {
+            response = translations[currentLang].sleep_response;
+        }
+
+        else // Check for facilities
+        if (facilitiesKeywords.some(word => msgLower.includes(word))) {
+            response = translations[currentLang].facilities_response;
+        }
+
+        else // Check for thank you
+        if (thankKeywords.some(word => msgLower.includes(word))) {
+            response = translations[currentLang].thank_response;
+        }
+
+        else // Check for help request
+        if (helpKeywords.some(word => msgLower.includes(word))) {
+            response = translations[currentLang].help_response;
+        }
+
+        else // Default empathetic response
+        {
+            response = translations[currentLang].default_response;
+        }
+
+        addBotMessage(response);
+    }
+
+    // Enter key to send message
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    // Initialize with English translations
+    updateTranslations();
+    </script>
+</body>
+</html>
+ none;"></span>
+</div>
+
+<div class="facility-card" data-city="jeddah" data-lat="21.5433" data-lng="39.1728" onclick="selectFacility(this)">
+    <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">🏥 Al-Amal Hospital - Jeddah</h4>
+    <p style="color: #666; font-size: 14px;">📍 Jeddah | Psychiatric treatment and addiction services</p>
+    <p style="color: #999; font-size: 13px; margin-top: 8px;">📞 Phone: +966 12 234 5678</p>
+    <span class="distance-badge" style="display: none;"></span>
+</div>
+
+<div class="facility-card" data-city="dammam" data-lat="26.4207" data-lng="50.0888" onclick="selectFacility(this)">
+    <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">🏥 Al-Amal Hospital - Dammam</h4>
+    <p style="color: #666; font-size: 14px;">📍 Dammam | Psychiatric treatment and addiction services</p>
+    <p style="color: #999; font-size: 13px; margin-top: 8px;">📞 Phone: +966 13 234 5678</p>
+    <span class="distance-badge" style="display:
