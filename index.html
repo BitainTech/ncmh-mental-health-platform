@@ -597,6 +597,45 @@
             transform: translateY(-10px);
         }
     }
+.emergency-button {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+        color: white;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        z-index: 1000;
+        transition: all 0.3s;
+        animation: pulse 2s infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .rtl .emergency-button {
+        left: auto;
+        right: 30px;
+    }
+
+ .emergency-button:hover {
+        background: linear-gradient(135deg, #ff0000 0%, #990000 100%);
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.6);
+    }
+    @keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+        50% {
+            box-shadow: 0 4px 20px rgba(220, 53, 69, 0.8);
+        }
+    }
 
     @media (max-width: 768px) {
         .form-row {
@@ -634,15 +673,23 @@
                 <strong>AI-Empowered Triage center</strong>
                 , a platform that acts as your private decision-making tool.
             </p>
+          <div style="text-align: center; margin-top: 30px;">
+                <select id="language" onchange="changeLanguage(this.value)" style="padding: 8px 15px; border: 2px solid #1a7f37; border-radius: 20px; font-size: 12px; cursor: pointer; background: white; color: #333; font-weight: 600; max-width: 220px;">
+                    <option value="english">Select Language 🌐 اختر اللغة</option>
+                    <option value="english">English</option>
+                    <option value="arabic">العربية</option>
+                </select>
+            </div>
             <button class="button" onclick="showPage('page2')" data-translate="get_started">Get Started</button>
         </div>
 
         <!-- Page 2: Sign In/Sign Up -->
         <div class="page" id="page2">
-            <h2 data-translate="welcome">Welcome</h2>
-            <div class="tabs">
+           <h2 data-translate="welcome">Account</h2>
+           <div class="tabs">
                 <button class="tab active" onclick="showTab('signin')" data-translate="signin">Sign In</button>
                 <button class="tab" onclick="showTab('signup')" data-translate="signup">Sign Up</button>
+                <button class="tab" onclick="showPage('page5')" data-translate="browse_anonymous">Browse Anonymously</button>
             </div>
             <div class="tab-content active" id="signin-content">
                 <div id="signin-message" style="display: none; padding: 15px; margin-bottom: 20px; border-radius: 5px; text-align: center; font-weight: bold;"></div>
@@ -698,14 +745,6 @@
                             <label data-translate="last_name">Last Name *</label>
                             <input type="text" id="lastname" required>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label data-translate="preferred_language">Preferred Language *</label>
-                        <select id="language" required onchange="changeLanguage(this.value)">
-                            <option value="">Select language / اختر اللغة</option>
-                            <option value="english">English</option>
-                            <option value="arabic">العربية</option>
-                        </select>
                     </div>
                 </div>
                 <div class="form-section">
@@ -806,6 +845,8 @@
                 <div class="form-group">
                     <label data-translate="additional_details">Additional details (optional)</label>
                     <textarea id="additional-details" placeholder="Share as much or as little as you're comfortable with..."></textarea>
+                   <button type="button" onclick="toggleVoiceRecording()" style="margin-top: 10px; padding: 10px 20px; background: #1a7f37; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;" id="voice-btn" data-translate="record_voice">🎤 Record Voice Message</button>
+                    <div id="recording-status" style="display: none; margin-top: 10px; color: #1a7f37; font-weight: bold;"></div>
                 </div>
                 <div id="sentiment-result"></div>
                 <button type="submit" class="button" data-translate="continue">Continue</button>
@@ -814,22 +855,17 @@
                 </p>
             </form>
         </div>
-
-        <!-- Page 6: Support Options -->
+<!-- Page 6: Support Options -->
         <div class="page" id="page6">
             <h2 data-translate="support_type">Type of support requested</h2>
             <form onsubmit="event.preventDefault(); handleSupportSelection();" style="max-width: 600px; margin: 0 auto;">
                 <div style="background: #f8f9fa; padding: 30px; border-radius: 8px; margin-bottom: 20px;">
-                    <label style="display: flex; align-items: center; padding: 15px; cursor: not-allowed; opacity: 0.5;">
-                        <input type="checkbox" disabled style="margin-right: 15px; width: 20px; height: 20px;">
-                        <span style="font-size: 16px;" data-translate="resources_coming">Resources (Coming soon)</span>
-                    </label>
-                    <label style="display: flex; align-items: center; padding: 15px; cursor: not-allowed; opacity: 0.5;">
-                        <input type="checkbox" disabled style="margin-right: 15px; width: 20px; height: 20px;">
-                        <span style="font-size: 16px;" data-translate="counselor_coming">Counselor (Coming soon)</span>
+                    <label style="display: flex; align-items: center; padding: 15px; cursor: pointer; background: white; border-radius: 5px; border: 2px solid #e0e0e0; margin-bottom: 15px;">
+                        <input type="checkbox" id="wellness-check" onchange="handleCheckboxChange('wellness')" style="margin-right: 15px; width: 20px; height: 20px; cursor: pointer;">
+                        <span style="font-size: 16px; font-weight: 600;" data-translate="wellness_platform">Wellness Platform</span>
                     </label>
                     <label style="display: flex; align-items: center; padding: 15px; cursor: pointer; background: white; border-radius: 5px; border: 2px solid #e0e0e0;">
-                        <input type="checkbox" id="healthcare-check" style="margin-right: 15px; width: 20px; height: 20px; cursor: pointer;">
+                        <input type="checkbox" id="healthcare-check" onchange="handleCheckboxChange('healthcare')" style="margin-right: 15px; width: 20px; height: 20px; cursor: pointer;">
                         <span style="font-size: 16px; font-weight: 600;" data-translate="healthcare_facilities">Health Care Facilities</span>
                     </label>
                 </div>
@@ -854,23 +890,31 @@
                     </div>
                 </div>
 
-                <div class="map-container">
-                    <div class="map-placeholder">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                        </svg>
-                        <h3 style="margin-bottom: 10px;" data-translate="map_title">Mental Health Facilities Map</h3>
-                        <p data-translate="map_subtitle">Search for your city to find the nearest facility</p>
-                        <div id="distance-info" style="margin-top: 15px; font-weight: bold; color: #1a7f37;"></div>
-                    </div>
+              <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3707850.7885932843!2d42.60889995!3d23.8859421!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sus!4v1234567890" width="100%" height="100%" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy"></iframe>
+                    <div id="distance-info" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; color: #1a7f37; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></div>
                 </div>
 
                 <h3 style="font-size: 20px; color: #1a7f37; margin: 30px 0 20px;" data-translate="government_facilities">Government Mental Health Facilities</h3>
 
-                <div class="facility-card" data-city="riyadh" data-lat="24.7136" data-lng="46.6753" onclick="selectFacility(this)">
+                <div class="facility-card" data-city="riyadh" data-lat="24.7136" data-lng="46.6753" onclick="window.open('https://www.moh.gov.sa/en/Ministry/Structure/Programs/NMHP/Pages/default.aspx', '_blank')">
                     <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">🏥 Al-Amal Hospital - Riyadh</h4>
                     <p style="color: #666; font-size: 14px;">📍 Riyadh | Psychiatric treatment and addiction services</p>
                     <p style="color: #999; font-size: 13px; margin-top: 8px;">📞 Phone: +966 11 234 5678</p>
+                    <span class="distance-badge" style="display: none;"></span>
+                </div>
+
+                <div class="facility-card" data-city="jeddah" data-lat="21.5433" data-lng="39.1728" onclick="window.open('https://www.moh.gov.sa/en/Ministry/Structure/Programs/NMHP/Pages/default.aspx', '_blank')">
+                    <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">🏥 Al-Amal Hospital - Jeddah</h4>
+                    <p style="color: #666; font-size: 14px;">📍 Jeddah | Psychiatric treatment and addiction services</p>
+                    <p style="color: #999; font-size: 13px; margin-top: 8px;">📞 Phone: +966 12 345 6789</p>
+                    <span class="distance-badge" style="display: none;"></span>
+                </div>
+
+                <div class="facility-card" data-city="dammam" data-lat="26.4207" data-lng="50.0888" onclick="window.open('https://www.moh.gov.sa/en/Ministry/Structure/Programs/NMHP/Pages/default.aspx', '_blank')">
+                    <h4 style="color: #1a7f37; margin-bottom: 10px; font-size: 18px;">🏥 Al-Amal Hospital - Dammam</h4>
+                    <p style="color: #666; font-size: 14px;">📍 Dammam | Psychiatric treatment and addiction services</p>
+                    <p style="color: #999; font-size: 13px; margin-top: 8px;">📞 Phone: +966 13 456 7890</p>
                     <span class="distance-badge" style="display: none;"></span>
                 </div>
 
@@ -882,10 +926,127 @@
                 </p>
             </div>
         </div>
-    </div>
+    
+<!-- Page 8: Tier Support System -->
+        <div class="page" id="page8">
+            <h2 data-translate="tier_main_title">Personalized Support Levels</h2>
+            <p style="text-align: center; color: #666; max-width: 800px; margin: 0 auto 40px;" data-translate="tier_main_intro">Our AI-powered triage system connects you with the right level of support based on your current needs. From immediate crisis intervention to daily wellness maintenance, we're here for you at every stage.</p>
+            
+            <div style="max-width: 900px; margin: 0 auto;">
+                <!-- Tier 1 -->
+                <div style="background: linear-gradient(to right, #fff5f5 0%, white 10%); border-left: 6px solid #dc3545; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 20px;">
+                        <div style="font-size: 48px;">🚨</div>
+                        <div>
+                            <h3 style="color: #dc3545; font-size: 24px; margin-bottom: 5px;" data-translate="tier1_title">Tier 1: Crisis / Emergency</h3>
+                            <div style="color: #666; font-size: 14px; font-style: italic;" data-translate="tier1_subtitle">Immediate support for acute distress</div>
+                        </div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <strong data-translate="when_use">When to use:</strong> <span data-translate="tier1_when">Suicidal thoughts, acute distress, severe panic, immediate danger to self or others.</span>
+                    </div>
+                    <h4 style="color: #dc3545; margin: 20px 0 15px;" data-translate="tier1_feature_title">One-Tap Crisis Line & Local Contacts</h4>
+                    <p style="margin-bottom: 12px;"><strong data-translate="tier1_hotline">Saudi MoH "With You" (Makom) Hotline:</strong> <span data-translate="tier1_feature1">Immediate connection to trained crisis counselors.</span></p>
+                    <p style="margin-bottom: 20px;"><strong data-translate="tier1_emergency">Local Emergency Services:</strong> <span data-translate="tier1_feature2">Direct access to mental health emergency response teams.</span></p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 25px 0;">
+                        <a href="tel:920033360" style="background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;" data-translate="tier1_btn1">📞 Call Crisis Hotline: 920033360</a>
+                        <a href="tel:997" style="background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;" data-translate="tier1_btn2">🚓 Emergency Services: 997</a>
+                    </div>
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545; margin-top: 20px;">
+                        <strong style="color: #721c24;" data-translate="tier1_note_strong">Your safety is our priority.</strong> <span data-translate="tier1_note">If you're in immediate danger, please call emergency services right away. These services are confidential, free, and available 24/7.</span>
+                    </div>
+                </div>
+
+                <!-- Tier 2 -->
+                <div style="background: linear-gradient(to right, #fff8f0 0%, white 10%); border-left: 6px solid #ff9800; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 20px;">
+                        <div style="font-size: 48px;">⚠️</div>
+                        <div>
+                            <h3 style="color: #ff9800; font-size: 24px; margin-bottom: 5px;" data-translate="tier2_title">Tier 2: High Stress / Need for Support</h3>
+                            <div style="color: #666; font-size: 14px; font-style: italic;" data-translate="tier2_subtitle">Professional support for acute but non-emergency situations</div>
+                        </div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <strong data-translate="when_use">When to use:</strong> <span data-translate="tier2_when">Acute anxiety, panic attacks, overwhelming stress. Not an emergency, but you need actual human support and/or a licensed therapist.</span>
+                    </div>
+                    <h4 style="color: #ff9800; margin: 20px 0 15px;" data-translate="tier2_feature_title">Instant Therapist Connection (Chat/Audio)</h4>
+                    <p style="margin-bottom: 12px;"><strong data-translate="tier2_immediate">Immediate Wellness Check-up:</strong> <span data-translate="tier2_feature1">Access to the first available licensed therapist, counselor, or trained professional.</span></p>
+                    <p style="margin-bottom: 20px;"><strong data-translate="tier2_human">Human Check-in:</strong> <span data-translate="tier2_feature2">Real-time support with option to book follow-up appointments.</span></p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 25px 0;">
+                        <button onclick="alert(currentLang === 'arabic' ? 'جاري البحث عن معالج متاح...\n\nسيتم توصيلك قريباً بأخصائي صحة نفسية مرخص.' : 'Searching for available therapist...\n\nYou will be connected shortly with a licensed mental health professional.')" style="background: #1a7f37; color: white; padding: 12px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; font-size: 16px;" data-translate="tier2_btn1">💬 Connect with Therapist Now</button>
+                        <button onclick="alert(currentLang === 'arabic' ? 'جاري فتح نظام الحجز...\n\nيمكنك اختيار الوقت والمعالج المناسب.' : 'Opening appointment booking system...\n\nYou can select your preferred time and therapist.')" style="background: white; color: #1a7f37; padding: 12px 24px; border-radius: 8px; border: 2px solid #1a7f37; cursor: pointer; font-weight: bold; font-size: 16px;" data-translate="tier2_btn2">🗓️ Book Appointment</button>
+                    </div>
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ff9800; margin-top: 20px;">
+                        <strong data-translate="tier2_note_strong">Average wait time: 5-10 minutes</strong><br><span data-translate="tier2_note">Our licensed professionals are here to help you navigate difficult moments with compassion and expertise.</span>
+                    </div>
+                </div>
+
+                <!-- Tier 3 -->
+                <div style="background: linear-gradient(to right, #f0f8ff 0%, white 10%); border-left: 6px solid #2196f3; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 20px;">
+                        <div style="font-size: 48px;">📝</div>
+                        <div>
+                            <h3 style="color: #2196f3; font-size: 24px; margin-bottom: 5px;" data-translate="tier3_title">Tier 3: Moderate Concern / Self-Management</h3>
+                            <div style="color: #666; font-size: 14px; font-style: italic;" data-translate="tier3_subtitle">Tools for managing ongoing wellness</div>
+                        </div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <strong data-translate="when_use">When to use:</strong> <span data-translate="tier3_when">Chronic stress, insomnia, feeling down, general wellness management. You want to address issues privately at your own pace.</span>
+                    </div>
+                    <h4 style="color: #2196f3; margin: 20px 0 15px;" data-translate="tier3_feature_title">Self-Help Modules</h4>
+                    <p style="margin-bottom: 12px;"><strong data-translate="tier3_hub">NCMH Training Hub:</strong> <span data-translate="tier3_feature1">Direct links to comprehensive self-help resources and structured programs.</span></p>
+                    <p style="margin-bottom: 12px;"><strong data-translate="tier3_support">Support Groups:</strong> <span data-translate="tier3_feature2">Connect with others experiencing similar challenges in safe, moderated spaces.</span></p>
+                    <p style="margin-bottom: 20px;"><strong data-translate="tier3_cultural">Culturally Relevant Content:</strong> <span data-translate="tier3_feature3">Sakinah meditation, CBT exercises, mood journaling, sleep stories tailored for Saudi culture.</span></p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 25px 0;">
+                        <button onclick="alert(currentLang === 'arabic' ? 'الوصول إلى مكتبة المساعدة الذاتية...\n\nستجد تمارين CBT، إدارة الإجهاد، تقنيات النوم والمزيد.' : 'Accessing Self-Help Library...\n\nYou\'ll find CBT exercises, stress management, sleep techniques, and more.')" style="background: #1a7f37; color: white; padding: 12px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; font-size: 16px;" data-translate="tier3_btn1">📚 Access Self-Help Modules</button>
+                        <button onclick="alert(currentLang === 'arabic' ? 'الانضمام إلى مجموعة الدعم...\n\nتواصل مع آخرين يمرون بتجارب مماثلة في بيئة آمنة.' : 'Joining Support Group...\n\nConnect with others experiencing similar challenges in a safe environment.')" style="background: white; color: #1a7f37; padding: 12px 24px; border-radius: 8px; border: 2px solid #1a7f37; cursor: pointer; font-weight: bold; font-size: 16px;" data-translate="tier3_btn2">👥 Join Support Group</button>
+                        <button onclick="alert(currentLang === 'arabic' ? 'بدء تأمل السكينة...\n\nخذ نفساً عميقاً واسترخِ. سنرشدك خلال جلسة تأمل مهدئة.' : 'Starting Sakinah Meditation...\n\nTake a deep breath and relax. We\'ll guide you through a calming meditation session.')" style="background: white; color: #1a7f37; padding: 12px 24px; border-radius: 8px; border: 2px solid #1a7f37; cursor: pointer; font-weight: bold; font-size: 16px;" data-translate="tier3_btn3">🧘 Sakinah Meditation</button>
+                    </div>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #2196f3; margin-top: 20px;">
+                        <strong data-translate="tier3_note_strong">Build resilience at your own pace.</strong><br><span data-translate="tier3_note">These evidence-based tools are designed to help you develop long-term coping strategies and emotional wellbeing.</span>
+                    </div>
+                </div>
+
+                <!-- Tier 4 -->
+                <div style="background: linear-gradient(to right, #f0fff4 0%, white 10%); border-left: 6px solid #4caf50; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 20px;">
+                        <div style="font-size: 48px;">✨</div>
+                        <div>
+                            <h3 style="color: #4caf50; font-size: 24px; margin-bottom: 5px;" data-translate="tier4_title">Tier 4: Prevention / Overall Wellbeing</h3>
+                            <div style="color: #666; font-size: 14px; font-style: italic;" data-translate="tier4_subtitle">Strengthen and maintain emotional wellness</div>
+                        </div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <strong data-translate="when_use">When to use:</strong> <span data-translate="tier4_when">Nothing urgent to report, you're feeling okay but want to strengthen overall wellbeing including emotional wellness and mindfulness.</span>
+                    </div>
+                    <h4 style="color: #4caf50; margin: 20px 0 15px;" data-translate="tier4_feature_title">NCMH Wellness Library and Hub</h4>
+                    <p style="margin-bottom: 12px;"><strong data-translate="tier4_educational">Educational Content:</strong> <span data-translate="tier4_feature1">Articles, podcasts, and webinars on mental health, emotional wellbeing, and personal growth.</span></p>
+                    <p style="margin-bottom: 12px;"><strong data-translate="tier4_toolkit">NCMH Wellness Toolkit:</strong> <span data-translate="tier4_feature2">Goal-setting tools, habit trackers, wellness exercises, and guided meditation.</span></p>
+                    <p style="margin-bottom: 20px;"><strong data-translate="tier4_community">Curated Community:</strong> <span data-translate="tier4_feature3">NCMH wellness support community with resources and customized training programs.</span></p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 25px 0;">
+                        <button onclick="alert(currentLang === 'arabic' ? 'استكشاف مركز NCMH للعافية...\n\nاكتشف مقالات، بودكاست، ندوات وأدوات لتعزيز صحتك النفسية.' : 'Exploring NCMH Wellness Hub...\n\nDiscover articles, podcasts, webinars, and tools to enhance your mental wellbeing.')" style="background: #1a7f37; color: white; padding: 12px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; font-size: 16px;" data-translate="tier4_btn1">🌟 Explore Wellness Hub</button>
+                        <button onclick="alert(currentLang === 'arabic' ? 'تحديد أهداف العافية...\n\nحدد أهدافك الشخصية وتتبع تقدمك نحو حياة أكثر صحة.' : 'Setting Wellness Goals...\n\nDefine your personal goals and track your progress toward a healthier life.')" style="background: white; color: #1a7f37; padding: 12px 24px; border-radius: 8px; border: 2px solid #1a7f37; cursor: pointer; font-weight: bold; font-size: 16px;" data-translate="tier4_btn2">🎯 Set Wellness Goals</button>
+                        <button onclick="alert(currentLang === 'arabic' ? 'الانضمام إلى مجتمع NCMH...\n\nتواصل مع آخرين ملتزمين بالعافية والصحة النفسية.' : 'Joining NCMH Community...\n\nConnect with others committed to wellness and mental health.')" style="background: white; color: #1a7f37; padding: 12px 24px; border-radius: 8px; border: 2px solid #1a7f37; cursor: pointer; font-weight: bold; font-size: 16px;" data-translate="tier4_btn3">🤝 Join Community</button>
+                    </div>
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50; margin-top: 20px;">
+                        <strong data-translate="tier4_note_strong">Prevention is the best medicine.</strong><br><span data-translate="tier4_note">Regular engagement with wellness practices helps build resilience and prevents future crises.</span>
+                    </div>
+                </div>
+
+                <p style="text-align: center; margin-top: 40px;">
+                    <a class="back-link" onclick="showPage('page1')" data-translate="back_home">← Back to Home</a>
+                </p>
+                <p style="text-align: center; margin-top: 15px;">
+                    <a class="back-link" onclick="showPage('page7')" data-translate="view_healthcare">→ Health Care Facilities</a>
+                </p>
+            </div>
+        </div>
+ </div>
 
     <!-- AI-Powered Chatbot (Feature #2) -->
-    <button class="chatbot-button" onclick="toggleChatbot()">💬</button>
+<button class="emergency-button" onclick="callEmergency()" id="emergency-btn">
+    <div style="font-size: 8px; margin-top: -2px; line-height: 1.1;"><span data-translate="call_emergency">Call<br>Emergency</span></div>
+</button>    <button class="chatbot-button" onclick="toggleChatbot()">💬</button>
     <div class="chatbot-window" id="chatbot">
         <div class="chatbot-header">
             <span>
@@ -912,7 +1073,7 @@
             home_title: 'National Center for Mental Health<br>in Saudi Arabia',
             home_description: 'Welcome to the confidential user-friendly platform that encourages seeking support and makes it simple and accessible to all. Our core feature is the <strong>AI-Empowered Triage center</strong>, a platform that acts as your private decision-making tool.',
             get_started: 'Get Started',
-            welcome: 'Welcome',
+            welcome: 'Account',
             signin: 'Sign In',
             signup: 'Sign Up',
             username: 'Username',
@@ -954,9 +1115,10 @@
             other: 'Other',
             additional_details: 'Additional details (optional)',
             continue: 'Continue',
+browse_anonymous: 'Browse Anonymously',
             support_type: 'Type of support requested',
-            resources_coming: 'Resources (Coming soon)',
-            counselor_coming: 'Counselor (Coming soon)',
+           resources_coming: 'Resources',
+            counselor_coming: 'Counselor',
             healthcare_facilities: 'Health Care Facilities',
             enter_location: 'Enter your location',
             search: 'Search',
@@ -986,13 +1148,74 @@
             help_response: '🤝 I\'m here to support you. I can help with:\n\n1️⃣ Crisis support & emergency contacts\n2️⃣ Understanding mental health conditions\n3️⃣ Finding nearby facilities\n4️⃣ Coping strategies & techniques\n5️⃣ Booking appointments\n\nWhat would be most helpful for you right now?',
             default_response: 'I\'m listening. 👂 Your feelings are valid.\n\nCould you tell me more about what you\'re experiencing? The more you share, the better I can help you find the right support.',
             how_can_help: 'How can I help you?',
-            im_thinking: 'I\'m thinking...'
+            im_thinking: 'I\'m thinking...',
+            // Tier translations
+            tier_main_title: 'Personalized Support Levels',
+            tier_main_intro: 'Our AI-powered triage system connects you with the right level of support based on your current needs. From immediate crisis intervention to daily wellness maintenance, we\'re here for you at every stage.',
+            when_use: 'When to use:',
+            tier1_title: 'Tier 1: Crisis / Emergency',
+            tier1_subtitle: 'Immediate support for acute distress',
+            tier1_when: 'Suicidal thoughts, acute distress, severe panic, immediate danger to self or others.',
+            tier1_feature_title: 'One-Tap Crisis Line & Local Contacts',
+            tier1_hotline: 'Saudi MoH "With You" (Makom) Hotline:',
+            tier1_feature1: 'Immediate connection to trained crisis counselors.',
+            tier1_emergency: 'Local Emergency Services:',
+            tier1_feature2: 'Direct access to mental health emergency response teams.',
+            tier1_btn1: '📞 Call Crisis Hotline: 920033360',
+            tier1_btn2: '🚓 Emergency Services: 997',
+            tier1_note_strong: 'Your safety is our priority.',
+            tier1_note: 'If you\'re in immediate danger, please call emergency services right away. These services are confidential, free, and available 24/7.',
+            tier2_title: 'Tier 2: High Stress / Need for Support',
+            tier2_subtitle: 'Professional support for acute but non-emergency situations',
+            tier2_when: 'Acute anxiety, panic attacks, overwhelming stress. Not an emergency, but you need actual human support and/or a licensed therapist.',
+            tier2_feature_title: 'Instant Therapist Connection (Chat/Audio)',
+            tier2_immediate: 'Immediate Wellness Check-up:',
+            tier2_feature1: 'Access to the first available licensed therapist, counselor, or trained professional.',
+            tier2_human: 'Human Check-in:',
+            tier2_feature2: 'Real-time support with option to book follow-up appointments.',
+            tier2_btn1: '💬 Connect with Therapist Now',
+            tier2_btn2: '🗓️ Book Appointment',
+            tier2_note_strong: 'Average wait time: 5-10 minutes',
+            tier2_note: 'Our licensed professionals are here to help you navigate difficult moments with compassion and expertise.',
+            tier3_title: 'Tier 3: Moderate Concern / Self-Management',
+            tier3_subtitle: 'Tools for managing ongoing wellness',
+            tier3_when: 'Chronic stress, insomnia, feeling down, general wellness management. You want to address issues privately at your own pace.',
+            tier3_feature_title: 'Self-Help Modules',
+            tier3_hub: 'NCMH Training Hub:',
+            tier3_feature1: 'Direct links to comprehensive self-help resources and structured programs.',
+            tier3_support: 'Support Groups:',
+            tier3_feature2: 'Connect with others experiencing similar challenges in safe, moderated spaces.',
+            tier3_cultural: 'Culturally Relevant Content:',
+            tier3_feature3: 'Sakinah meditation, CBT exercises, mood journaling, sleep stories tailored for Saudi culture.',
+            tier3_btn1: '📚 Access Self-Help Modules',
+            tier3_btn2: '👥 Join Support Group',
+            tier3_btn3: '🧘 Sakinah Meditation',
+            tier3_note_strong: 'Build resilience at your own pace.',
+            tier3_note: 'These evidence-based tools are designed to help you develop long-term coping strategies and emotional wellbeing.',
+            tier4_title: 'Tier 4: Prevention / Overall Wellbeing',
+            tier4_subtitle: 'Strengthen and maintain emotional wellness',
+            tier4_when: 'Nothing urgent to report, you\'re feeling okay but want to strengthen overall wellbeing including emotional wellness and mindfulness.',
+            tier4_feature_title: 'NCMH Wellness Library and Hub',
+            tier4_educational: 'Educational Content:',
+            tier4_feature1: 'Articles, podcasts, and webinars on mental health, emotional wellbeing, and personal growth.',
+            tier4_toolkit: 'NCMH Wellness Toolkit:',
+            tier4_feature2: 'Goal-setting tools, habit trackers, wellness exercises, and guided meditation.',
+            tier4_community: 'Curated Community:',
+            tier4_feature3: 'NCMH wellness support community with resources and customized training programs.',
+            tier4_btn1: '🌟 Explore Wellness Hub',
+            tier4_btn2: '🎯 Set Wellness Goals',
+            tier4_btn3: '🤝 Join Community',
+          tier4_note_strong: 'Prevention is the best medicine.',
+           tier4_note: 'Regular engagement with wellness practices helps build resilience and prevents future crises.',
+            call_emergency: 'Call<br>Emergency',
+            wellness_platform: 'Wellness Platform',
+            view_healthcare: '→ Health Care Facilities'
         },
         arabic: {
             home_title: 'المركز الوطني للصحة النفسية<br>في المملكة العربية السعودية',
             home_description: 'مرحباً بك في المنصة السرية وسهلة الاستخدام التي تشجع على طلب الدعم وتجعله بسيطاً ومتاحاً للجميع. ميزتنا الأساسية هي <strong>مركز الفرز المدعوم بالذكاء الاصطناعي</strong>، منصة تعمل كأداة خاصة لاتخاذ القرار.',
             get_started: 'ابدأ الآن',
-            welcome: 'مرحباً',
+            welcome: 'الحساب',
             signin: 'تسجيل الدخول',
             signup: 'إنشاء حساب',
             username: 'اسم المستخدم',
@@ -1034,9 +1257,10 @@
             other: 'أخرى',
             additional_details: 'تفاصيل إضافية (اختياري)',
             continue: 'متابعة',
+browse_anonymous: 'تصفح بشكل مجهول',
             support_type: 'نوع الدعم المطلوب',
-            resources_coming: 'الموارد (قريباً)',
-            counselor_coming: 'المستشار (قريباً)',
+            resources_coming: 'الموارد',
+            counselor_coming: 'المستشار',
             healthcare_facilities: 'المرافق الصحية',
             enter_location: 'أدخل موقعك',
             search: 'بحث',
@@ -1066,7 +1290,68 @@
             help_response: '🤝 أنا هنا لدعمك. يمكنني المساعدة في:\n\n1️⃣ دعم الأزمات وجهات الاتصال الطارئة\n2️⃣ فهم حالات الصحة النفسية\n3️⃣ إيجاد المرافق القريبة\n4️⃣ استراتيجيات وتقنيات التأقلم\n5️⃣ حجز المواعيد\n\nما الذي سيكون أكثر فائدة لك الآن؟',
             default_response: 'أنا أستمع. 👂 مشاعرك صحيحة.\n\nهل يمكنك إخباري المزيد عما تمر به؟ كلما شاركت أكثر، كلما تمكنت من مساعدتك بشكل أفضل في إيجاد الدعم المناسب.',
             how_can_help: 'كيف يمكنني مساعدتك؟',
-            im_thinking: 'أنا أفكر...'
+           im_thinking: 'أنا أفكر...',
+            // Tier translations
+            tier_main_title: 'مستويات الدعم الشخصية',
+            tier_main_intro: 'يربطك نظام الفرز المدعوم بالذكاء الاصطناعي بالمستوى المناسب من الدعم بناءً على احتياجاتك الحالية. من التدخل الفوري في الأزمات إلى صيانة العافية اليومية، نحن هنا من أجلك في كل مرحلة.',
+            when_use: 'متى تستخدم:',
+            tier1_title: 'المستوى 1: أزمة / طوارئ',
+            tier1_subtitle: 'دعم فوري للضيق الحاد',
+            tier1_when: 'أفكار انتحارية، ضيق حاد، هلع شديد، خطر فوري على النفس أو الآخرين.',
+            tier1_feature_title: 'خط الأزمات بنقرة واحدة وجهات الاتصال المحلية',
+            tier1_hotline: 'خط مساعدة وزارة الصحة السعودية "معك" (مقوم):',
+            tier1_feature1: 'اتصال فوري بمستشاري الأزمات المدربين.',
+            tier1_emergency: 'خدمات الطوارئ المحلية:',
+            tier1_feature2: 'وصول مباشر لفرق الاستجابة لطوارئ الصحة النفسية.',
+            tier1_btn1: '📞 اتصل بخط الأزمات: 920033360',
+            tier1_btn2: '🚓 خدمات الطوارئ: 997',
+            tier1_note_strong: 'سلامتك هي أولويتنا.',
+            tier1_note: 'إذا كنت في خطر فوري، يرجى الاتصال بخدمات الطوارئ على الفور. هذه الخدمات سرية ومجانية ومتاحة على مدار الساعة.',
+            tier2_title: 'المستوى 2: ضغط عالٍ / حاجة للدعم',
+            tier2_subtitle: 'دعم مهني لحالات حادة لكن غير طارئة',
+            tier2_when: 'قلق حاد، نوبات هلع، ضغط شديد. ليست حالة طوارئ، لكنك تحتاج لدعم بشري فعلي و/أو معالج مرخص.',
+            tier2_feature_title: 'اتصال فوري بمعالج (دردشة/صوت)',
+            tier2_immediate: 'فحص العافية الفوري:',
+            tier2_feature1: 'الوصول إلى أول معالج متاح مرخص أو مستشار أو محترف مدرب.',
+            tier2_human: 'فحص بشري:',
+            tier2_feature2: 'دعم في الوقت الفعلي مع خيار حجز مواعيد متابعة.',
+            tier2_btn1: '💬 اتصل بمعالج الآن',
+            tier2_btn2: '🗓️ احجز موعداً',
+            tier2_note_strong: 'متوسط وقت الانتظار: 5-10 دقائق',
+            tier2_note: 'المحترفون المرخصون لدينا هنا لمساعدتك في التنقل عبر اللحظات الصعبة بالتعاطف والخبرة.',
+            tier3_title: 'المستوى 3: قلق معتدل / إدارة ذاتية',
+            tier3_subtitle: 'أدوات لإدارة العافية المستمرة',
+            tier3_when: 'ضغط مزمن، أرق، شعور بالإحباط، إدارة العافية العامة. تريد معالجة القضايا بشكل خاص وبوتيرتك الخاصة.',
+            tier3_feature_title: 'وحدات المساعدة الذاتية',
+            tier3_hub: 'مركز التدريب NCMH:',
+            tier3_feature1: 'روابط مباشرة لموارد المساعدة الذاتية الشاملة والبرامج المنظمة.',
+            tier3_support: 'مجموعات الدعم:',
+            tier3_feature2: 'تواصل مع آخرين يواجهون تحديات مماثلة في مساحات آمنة ومشرف عليها.',
+            tier3_cultural: 'محتوى ذو صلة ثقافية:',
+            tier3_feature3: 'تأمل السكينة، تمارين CBT، تدوين المزاج، قصص النوم المصممة للثقافة السعودية.',
+            tier3_btn1: '📚 الوصول لوحدات المساعدة الذاتية',
+            tier3_btn2: '👥 انضم لمجموعة دعم',
+            tier3_btn3: '🧘 تأمل السكينة',
+            tier3_note_strong: 'بناء المرونة بوتيرتك الخاصة.',
+            tier3_note: 'هذه الأدوات المبنية على الأدلة مصممة لمساعدتك على تطوير استراتيجيات تأقلم طويلة الأمد والعافية العاطفية.',
+            tier4_title: 'المستوى 4: الوقاية / العافية الشاملة',
+            tier4_subtitle: 'تعزيز والحفاظ على العافية العاطفية',
+            tier4_when: 'لا شيء عاجل للإبلاغ عنه، تشعر بأنك بخير لكن تريد تعزيز العافية الشاملة بما في ذلك العافية العاطفية واليقظة.',
+            tier4_feature_title: 'مكتبة ومركز NCMH للعافية',
+            tier4_educational: 'محتوى تعليمي:',
+            tier4_feature1: 'مقالات، بودكاست، ندوات حول الصحة النفسية، العافية العاطفية، والنمو الشخصي.',
+            tier4_toolkit: 'مجموعة أدوات العافية NCMH:',
+            tier4_feature2: 'أدوات تحديد الأهداف، متتبعات العادات، تمارين العافية، والتأمل الموجه.',
+            tier4_community: 'مجتمع منسق:',
+            tier4_feature3: 'مجتمع دعم العافية NCMH مع موارد وبرامج تدريب مخصصة.',
+            tier4_btn1: '🌟 استكشف مركز العافية',
+            tier4_btn2: '🎯 حدد أهداف العافية',
+            tier4_btn3: '🤝 انضم للمجتمع',
+            tier4_note_strong: 'الوقاية هي أفضل دواء.',
+           tier4_note: 'الانخراط المنتظم في ممارسات العافية يساعد على بناء المرونة ويمنع الأزمات المستقبلية.',
+            call_emergency: 'اتصل<br>الطوارئ',
+            wellness_platform: 'منصة العافية',
+            view_healthcare: '← المرافق الصحية'
         }
     };
 
@@ -1114,9 +1399,27 @@
         }
     };
 
-    function showPage(id) {
+   function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        
+        // Reset page 5 when navigating to it
+        if (id === 'page5') {
+            var feelingSelect = document.getElementById('feeling');
+            if (feelingSelect) feelingSelect.selectedIndex = 0;
+            var sentimentResult = document.getElementById('sentiment-result');
+            if (sentimentResult) sentimentResult.innerHTML = '';
+            var detailsField = document.getElementById('additional-details');
+            if (detailsField) detailsField.value = '';
+        }
+        
+        // Uncheck support checkboxes when leaving page 6
+        if (id !== 'page7' && id !== 'page8') {
+            var wellnessCheck = document.getElementById('wellness-check');
+            var healthCheck = document.getElementById('healthcare-check');
+            if (wellnessCheck) wellnessCheck.checked = false;
+            if (healthCheck) healthCheck.checked = false;
+        }
     }
 
     function showTab(tab) {
@@ -1168,14 +1471,51 @@
         }
     }
 
-    function changeLanguage(lang) {
+   function changeLanguage(lang) {
         currentLang = lang;
         if (lang === 'arabic') {
             document.body.classList.add('rtl');
         } else {
             document.body.classList.remove('rtl');
         }
+        
+        // Uncheck all support option checkboxes
+        var wellnessCheck = document.getElementById('wellness-check');
+        var healthcareCheck = document.getElementById('healthcare-check');
+        if (wellnessCheck) wellnessCheck.checked = false;
+        if (healthcareCheck) healthcareCheck.checked = false;
+        
+        // Reset feeling dropdown
+        var feelingSelect = document.getElementById('feeling');
+        if (feelingSelect) feelingSelect.selectedIndex = 0;
+        
+        // Clear sentiment result
+        var sentimentResult = document.getElementById('sentiment-result');
+        if (sentimentResult) sentimentResult.innerHTML = '';
+        
         updateTranslations();
+        
+        // Update sentiment result immediately if it exists
+        var sentimentResult = document.getElementById('sentiment-result');
+        if (sentimentResult && sentimentResult.innerHTML) {
+            var sentiment = sentimentResult.querySelector('.sentiment-indicator');
+            if (sentiment) {
+                if (sentiment.classList.contains('sentiment-positive')) {
+                    sentiment.textContent = translations[currentLang].sentiment_positive;
+                } else if (sentiment.classList.contains('sentiment-neutral')) {
+                    sentiment.textContent = translations[currentLang].sentiment_neutral;
+                } else if (sentiment.classList.contains('sentiment-negative')) {
+                    sentiment.textContent = translations[currentLang].sentiment_negative;
+                }
+            }
+        }
+        
+        // Reset chatbot in new language
+        var chatMessages = document.getElementById('chatMessages');
+        if (chatMessages && chatMessages.children.length > 0) {
+            chatMessages.innerHTML = '';
+            addBotMessage(translations[currentLang].chat_greeting);
+        }
     }
 
     function updateTranslations() {
@@ -1184,7 +1524,23 @@
             var key = el.getAttribute('data-translate');
             if (translations[currentLang][key]) {
                 el.innerHTML = translations[currentLang][key];
-            }
+           // Update feelings dropdown options
+        var feelingSelect = document.getElementById('feeling');
+        if (feelingSelect) {
+            var options = feelingSelect.options;
+            options[0].textContent = translations[currentLang].select_option;
+            options[1].textContent = '😢 ' + translations[currentLang].sad;
+            options[2].textContent = '😰 ' + translations[currentLang].overwhelmed;
+            options[3].textContent = '📚 ' + translations[currentLang].school_stress;
+            options[4].textContent = '💼 ' + translations[currentLang].workplace_stress;
+            options[5].textContent = '👨‍👩‍👧 ' + translations[currentLang].family_stress;
+            options[6].textContent = '😟 ' + translations[currentLang].anxiety;
+            options[7].textContent = '😔 ' + translations[currentLang].depression;
+            options[8].textContent = '😴 ' + translations[currentLang].cannot_sleep;
+            options[9].textContent = '😨 ' + translations[currentLang].panic_attack;
+            options[10].textContent = '💔 ' + translations[currentLang].suicidal;
+            options[11].textContent = '🤔 ' + translations[currentLang].other;
+        } }
         });
 
         // Update chatbot title
@@ -1198,6 +1554,21 @@
         currentLang === 'arabic' ? 'المدينة أو المنطقة' : 'City or Region';
         document.getElementById('additional-details').placeholder =
         currentLang === 'arabic' ? 'شارك بقدر ما تشعر بالراحة...' : 'Share as much or as little as you\'re comfortable with...';
+// Update voice button text
+        var voiceBtn = document.getElementById('voice-btn');
+        if (voiceBtn) {
+            var isRecording = mediaRecorder && mediaRecorder.state === 'recording';
+            if (isRecording) {
+                voiceBtn.textContent = currentLang === 'arabic' ? '⏹️ إيقاف التسجيل' : '⏹️ Stop Recording';
+            } else {
+                voiceBtn.textContent = currentLang === 'arabic' ? '🎤 تسجيل رسالة صوتية' : '🎤 Record Voice Message';
+            }
+        }
+// Clear recorded voice messages when language changes
+        var detailsField = document.getElementById('additional-details');
+        if (detailsField && detailsField.value.includes('[Voice message recorded')) {
+            detailsField.value = '';
+        }
     }
 
     // AI Feature #1: Sentiment Analysis with keyword detection
@@ -1248,9 +1619,27 @@
 
         setTimeout(() => showPage('page6'), 2500);
     }
+function handleCheckboxChange(selected) {
+        var wellnessCheck = document.getElementById('wellness-check');
+        var healthcareCheck = document.getElementById('healthcare-check');
+        
+        if (selected === 'wellness' && wellnessCheck.checked) {
+            healthcareCheck.checked = false;
+        } else if (selected === 'healthcare' && healthcareCheck.checked) {
+            wellnessCheck.checked = false;
+        }
+    }
 
     function handleSupportSelection() {
-        if (document.getElementById('healthcare-check').checked) {
+        var wellnessChecked = document.getElementById('wellness-check').checked;
+        var healthcareChecked = document.getElementById('healthcare-check').checked;
+        
+        if (wellnessChecked && healthcareChecked) {
+            // Both selected - go to wellness first
+            showPage('page8');
+        } else if (wellnessChecked) {
+            showPage('page8');
+        } else if (healthcareChecked) {
             showPage('page7');
         } else {
             alert(translations[currentLang].select_support);
@@ -1483,11 +1872,106 @@
 
     // Initialize with English translations
     updateTranslations();
+var mediaRecorder = null;
+    var audioChunks = [];
+    
+    function toggleVoiceRecording() {
+        var btn = document.getElementById('voice-btn');
+        var status = document.getElementById('recording-status');
+        
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+            btn.textContent = currentLang === 'arabic' ? '🎤 تسجيل رسالة صوتية' : '🎤 Record Voice Message';
+            btn.style.background = '#1a7f37';
+            status.style.display = 'none';
+        } else {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+                    
+                    mediaRecorder.onstop = () => {
+                        var audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        var audioUrl = URL.createObjectURL(audioBlob);
+                        document.getElementById('additional-details').value += '\n[Voice message recorded - ' + new Date().toLocaleTimeString() + ']';
+                        alert(currentLang === 'arabic' ? 'تم تسجيل الرسالة الصوتية' : 'Voice message recorded successfully');
+                    };
+                    
+                    mediaRecorder.start();
+                   btn.textContent = currentLang === 'arabic' ? '⏹️ إيقاف التسجيل' : '⏹️ Stop Recording';
+                    btn.style.background = '#dc3545';
+                    status.style.display = 'block';
+                    status.textContent = currentLang === 'arabic' ? '🔴 جاري التسجيل...' : '🔴 Recording...';
+                })
+                .catch(err => {
+                    alert(currentLang === 'arabic' ? 'خطأ في الوصول للميكروفون' : 'Error accessing microphone');
+                });
+        }
+    }
+function callEmergency() {
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    
+    var modal = document.createElement('div');
+    modal.style.cssText = 'background:white;padding:30px;border-radius:12px;max-width:400px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3);';
+    
+    var message = document.createElement('div');
+    message.style.cssText = 'font-size:18px;color:#333;margin-bottom:25px;line-height:1.6;';
+    message.innerHTML = currentLang === 'arabic' 
+        ? 'هل تحتاج إلى مساعدة عاجلة؟<br><br><strong>خط المساعدة: 920033360</strong><br><br>هل تريد الاتصال الآن؟' 
+        : 'Do you need urgent help?<br><br><strong>Helpline: 920033360</strong><br><br>Would you like to call now?';
+    
+    var btnContainer = document.createElement('div');
+    btnContainer.style.cssText = 'display:flex;gap:10px;justify-content:center;flex-wrap:wrap;';
+    
+    var okBtn = document.createElement('button');
+    okBtn.textContent = currentLang === 'arabic' ? 'موافق' : 'OK';
+    okBtn.style.cssText = 'background:#dc3545;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:16px;';
+    okBtn.onclick = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (e && e.stopPropagation) e.stopPropagation();
+        document.body.removeChild(overlay);
+        setTimeout(function() {
+            var a = document.createElement('a');
+            a.href = 'tel:920033360';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }, 100);
+        return false;
+    };
+    
+    var moreBtn = document.createElement('button');
+    moreBtn.textContent = currentLang === 'arabic' ? 'خيارات أكثر' : 'More Options';
+    moreBtn.style.cssText = 'background:#1a7f37;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:16px;';
+    moreBtn.onclick = function() {
+        document.body.removeChild(overlay);
+        showPage('page8');
+    };
+    
+    var cancelBtn = document.createElement('button');
+    cancelBtn.textContent = currentLang === 'arabic' ? 'إلغاء' : 'Cancel';
+    cancelBtn.style.cssText = 'background:#6c757d;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:16px;';
+    cancelBtn.onclick = function() {
+        document.body.removeChild(overlay);
+    };
+    
+    btnContainer.appendChild(okBtn);
+    btnContainer.appendChild(moreBtn);
+    btnContainer.appendChild(cancelBtn);
+    modal.appendChild(message);
+    modal.appendChild(btnContainer);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+}
     </script>
 </body>
 </html>
- none;"></span>
-</div>
-
+ 
 
 
